@@ -1,118 +1,105 @@
-package br.com.github.danielso.ifood.cadastro;
+package br.com.github.danielso.ifood.cadastro.dto;
 
-import br.com.github.danielso.ifood.cadastro.entities.Localizacao;
+import java.util.Objects;
 
-import java.util.Date;
+public class RestauranteDTO extends AuditDTO {
 
-public class RestauranteDTO {
+	private String proprietario;
+	private String cnpj;
+	private String nome;
+	private LocalizacaoDTO localizacao;
 
-    private Long id;
-    private String proprietario;
-    private String cnpj;
-    private String nome;
-    private Localizacao localizacao;
+	public RestauranteDTO() {
+	}
 
-    public RestauranteDTO() {
-    }
+	public RestauranteDTO(String proprietario, String cnpj, String nome, LocalizacaoDTO localizacao) {
+		this.proprietario = proprietario;
+		this.cnpj = cnpj;
+		this.nome = nome;
+		this.localizacao = localizacao;
+	}
 
-    public RestauranteDTO(Long id, String proprietario, String cnpj, String nome, Localizacao localizacao) {
-        this.id = id;
-        this.proprietario = proprietario;
-        this.cnpj = cnpj;
-        this.nome = nome;
-        this.localizacao = localizacao;
-    }
+	public String getProprietario() {
+		return this.proprietario;
+	}
 
-    public Long getId() {
-        return this.id;
-    }
+	public void setProprietario(String proprietario) {
+		this.proprietario = proprietario;
+	}
 
-    public void setId(Long id) {
-        this.id = id;
-    }
+	public String getCnpj() {
+		return this.cnpj;
+	}
 
-    public String getProprietario() {
-        return this.proprietario;
-    }
+	public void setCnpj(String cnpj) {
+		this.cnpj = cnpj;
+	}
 
-    public void setProprietario(String proprietario) {
-        this.proprietario = proprietario;
-    }
+	public String getNome() {
+		return this.nome;
+	}
 
-    public String getCnpj() {
-        return this.cnpj;
-    }
+	public void setNome(String nome) {
+		this.nome = nome;
+	}
 
-    public void setCnpj(String cnpj) {
-        this.cnpj = cnpj;
-    }
+	public LocalizacaoDTO getLocalizacao() {
+		return this.localizacao;
+	}
 
-    public String getNome() {
-        return this.nome;
-    }
+	public void setLocalizacao(LocalizacaoDTO localizacao) {
+		this.localizacao = localizacao;
+	}
 
-    public void setNome(String nome) {
-        this.nome = nome;
-    }
+	public RestauranteDTO proprietario(String proprietario) {
+		setProprietario(proprietario);
+		return this;
+	}
 
-    public Localizacao getLocalizacao() {
-        return this.localizacao;
-    }
+	public RestauranteDTO cnpj(String cnpj) {
+		setCnpj(cnpj);
+		return this;
+	}
 
-    public void setLocalizacao(Localizacao localizacao) {
-        this.localizacao = localizacao;
-    }
+	public RestauranteDTO nome(String nome) {
+		setNome(nome);
+		return this;
+	}
 
-    public RestauranteDTO id(Long id) {
-        setId(id);
-        return this;
-    }
+	public RestauranteDTO localizacao(LocalizacaoDTO localizacao) {
+		setLocalizacao(localizacao);
+		return this;
+	}
 
-    public RestauranteDTO proprietario(String proprietario) {
-        setProprietario(proprietario);
-        return this;
-    }
+	@Override
+	public int hashCode() {
+		final var prime = 31;
+		int result = super.hashCode();
+		result = prime * result + Objects.hash(cnpj, localizacao, nome, proprietario);
+		return result;
+	}
 
-    public RestauranteDTO cnpj(String cnpj) {
-        setCnpj(cnpj);
-        return this;
-    }
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj) {
+			return true;
+		}
+		if (!super.equals(obj)) {
+			return false;
+		}
+		if (!(obj instanceof RestauranteDTO)) {
+			return false;
+		}
+		RestauranteDTO other = (RestauranteDTO) obj;
+		return Objects.equals(cnpj, other.cnpj) && Objects.equals(localizacao, other.localizacao)
+				&& Objects.equals(nome, other.nome) && Objects.equals(proprietario, other.proprietario);
+	}
 
-    public RestauranteDTO nome(String nome) {
-        setNome(nome);
-        return this;
-    }
-
-    public RestauranteDTO localizacao(Localizacao localizacao) {
-        setLocalizacao(localizacao);
-        return this;
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (o == this)
-            return true;
-        if (!(o instanceof RestauranteDTO)) {
-            return false;
-        }
-        RestauranteDTO restauranteDTO = (RestauranteDTO) o;
-        return Objects.equals(id, restauranteDTO.id) && Objects.equals(proprietario, restauranteDTO.proprietario) && Objects.equals(cnpj, restauranteDTO.cnpj) && Objects.equals(nome, restauranteDTO.nome) && Objects.equals(localizacao, restauranteDTO.localizacao);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(id, proprietario, cnpj, nome, localizacao);
-    }
-
-    @Override
-    public String toString() {
-        return "{" +
-            " id='" + getId() + "'" +
-            ", proprietario='" + getProprietario() + "'" +
-            ", cnpj='" + getCnpj() + "'" +
-            ", nome='" + getNome() + "'" +
-            ", localizacao='" + getLocalizacao() + "'" +
-            "}";
-    }
+	@Override
+	public String toString() {
+		return "RestauranteDTO [proprietario=" + proprietario + ", cnpj=" + cnpj + ", nome=" + nome + ", localizacao="
+				+ localizacao + ", getDataCriacao()=" + getDataCriacao() + ", getDataAtualizacao()="
+				+ getDataAtualizacao() + ", getId()=" + getId() + "]";
+	}
 
 }

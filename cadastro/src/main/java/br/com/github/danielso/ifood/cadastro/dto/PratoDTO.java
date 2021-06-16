@@ -1,129 +1,106 @@
-package br.com.github.danielso.ifood.cadastro.entities;
+package br.com.github.danielso.ifood.cadastro.dto;
 
-import io.quarkus.hibernate.orm.panache.PanacheEntityBase;
-
-import javax.persistence.*;
 import java.math.BigDecimal;
 import java.util.Objects;
 
-@Entity
-@Table(name = "prato")
-public class Prato extends PanacheEntityBase {
+public class PratoDTO extends AuditDTO {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+	private String nome;
+	private String desccricao;
+	private RestauranteDTO restaurante;
+	private BigDecimal preco;
 
-    private String nome;
+	public PratoDTO() {
+	}
 
-    private String desccricao;
+	public PratoDTO(String nome, String desccricao, RestauranteDTO restaurante, BigDecimal preco) {
+		this.nome = nome;
+		this.desccricao = desccricao;
+		this.restaurante = restaurante;
+		this.preco = preco;
+	}
 
-    @ManyToOne
-    private Restaurante restaurrante;
+	public String getNome() {
+		return this.nome;
+	}
 
-    private BigDecimal preco;
+	public void setNome(String nome) {
+		this.nome = nome;
+	}
 
-    public Prato() {
-    }
+	public String getDesccricao() {
+		return this.desccricao;
+	}
 
-    public Prato(Long id, String nome, String desccricao, Restaurante restaurrante, BigDecimal preco) {
-        this.id = id;
-        this.nome = nome;
-        this.desccricao = desccricao;
-        this.restaurrante = restaurrante;
-        this.preco = preco;
-    }
+	public void setDesccricao(String desccricao) {
+		this.desccricao = desccricao;
+	}
 
-    public Long getId() {
-        return this.id;
-    }
+	public RestauranteDTO getRestaurante() {
+		return this.restaurante;
+	}
 
-    public void setId(Long id) {
-        this.id = id;
-    }
+	public void setRestaurante(RestauranteDTO restaurante) {
+		this.restaurante = restaurante;
+	}
 
-    public String getNome() {
-        return this.nome;
-    }
+	public BigDecimal getPreco() {
+		return this.preco;
+	}
 
-    public void setNome(String nome) {
-        this.nome = nome;
-    }
+	public void setPreco(BigDecimal preco) {
+		this.preco = preco;
+	}
 
-    public String getDesccricao() {
-        return this.desccricao;
-    }
+	public PratoDTO nome(String nome) {
+		setNome(nome);
+		return this;
+	}
 
-    public void setDesccricao(String desccricao) {
-        this.desccricao = desccricao;
-    }
+	public PratoDTO desccricao(String desccricao) {
+		setDesccricao(desccricao);
+		return this;
+	}
 
-    public Restaurante getRestaurrante() {
-        return this.restaurrante;
-    }
+	public PratoDTO restaurante(RestauranteDTO restaurante) {
+		setRestaurante(restaurante);
+		return this;
+	}
 
-    public void setRestaurrante(Restaurante restaurrante) {
-        this.restaurrante = restaurrante;
-    }
+	public PratoDTO preco(BigDecimal preco) {
+		setPreco(preco);
+		return this;
+	}
 
-    public BigDecimal getPreco() {
-        return this.preco;
-    }
+	@Override
+	public int hashCode() {
+		final var prime = 31;
+		int result = super.hashCode();
+		result = prime * result + Objects.hash(desccricao, nome, preco, restaurante);
+		return result;
+	}
 
-    public void setPreco(BigDecimal preco) {
-        this.preco = preco;
-    }
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj) {
+			return true;
+		}
+		if (!super.equals(obj)) {
+			return false;
+		}
+		if (!(obj instanceof PratoDTO)) {
+			return false;
+		}
+		PratoDTO other = (PratoDTO) obj;
+		return Objects.equals(desccricao, other.desccricao) && Objects.equals(nome, other.nome)
+				&& Objects.equals(preco, other.preco) && Objects.equals(restaurante, other.restaurante);
+	}
 
-    public Prato id(Long id) {
-        setId(id);
-        return this;
-    }
-
-    public Prato nome(String nome) {
-        setNome(nome);
-        return this;
-    }
-
-    public Prato desccricao(String desccricao) {
-        setDesccricao(desccricao);
-        return this;
-    }
-
-    public Prato restaurrante(Restaurante restaurrante) {
-        setRestaurrante(restaurrante);
-        return this;
-    }
-
-    public Prato preco(BigDecimal preco) {
-        setPreco(preco);
-        return this;
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (o == this)
-            return true;
-        if (!(o instanceof Prato)) {
-            return false;
-        }
-        var prato = (Prato) o;
-        return Objects.equals(id, prato.id) && Objects.equals(nome, prato.nome) && Objects.equals(desccricao, prato.desccricao) && Objects.equals(restaurrante, prato.restaurrante) && Objects.equals(preco, prato.preco);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(id, nome, desccricao, restaurrante, preco);
-    }
-
-    @Override
-    public String toString() {
-        return "{" +
-            " id='" + getId() + "'" +
-            ", nome='" + getNome() + "'" +
-            ", desccricao='" + getDesccricao() + "'" +
-            ", restaurrante='" + getRestaurrante() + "'" +
-            ", preco='" + getPreco() + "'" +
-            "}";
-    }
+	@Override
+	public String toString() {
+		return "PratoDTO [nome=" + nome + ", desccricao=" + desccricao + ", restaurante=" + restaurante + ", preco="
+				+ preco + ", getDataCriacao()=" + getDataCriacao() + ", getDataAtualizacao()=" + getDataAtualizacao()
+				+ ", getId()=" + getId() + "]";
+	}
 
 }

@@ -1,93 +1,73 @@
-package br.com.github.danielso.ifood.cadastro.entities;
+package br.com.github.danielso.ifood.cadastro.dto;
 
-import io.quarkus.hibernate.orm.panache.PanacheEntityBase;
-
-import javax.persistence.*;
 import java.util.Objects;
 
-@Entity
-@Table(name = "localizacao")
-public class Localizacao extends PanacheEntityBase {
+public class LocalizacaoDTO extends AuditDTO {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+	private Double latitude;
+	private Double longitude;
 
-    private Double latitude;
+	public LocalizacaoDTO() {
+	}
 
-    private Double longitude;
+	public LocalizacaoDTO(Double latitude, Double longitude) {
+		this.latitude = latitude;
+		this.longitude = longitude;
+	}
 
-    public Localizacao() {
-    }
+	public Double getLatitude() {
+		return this.latitude;
+	}
 
-    public Localizacao(Long id, Double latitude, Double longitude) {
-        this.id = id;
-        this.latitude = latitude;
-        this.longitude = longitude;
-    }
+	public void setLatitude(Double latitude) {
+		this.latitude = latitude;
+	}
 
-    public Long getId() {
-        return this.id;
-    }
+	public Double getLongitude() {
+		return this.longitude;
+	}
 
-    public void setId(Long id) {
-        this.id = id;
-    }
+	public void setLongitude(Double longitude) {
+		this.longitude = longitude;
+	}
 
-    public Double getLatitude() {
-        return this.latitude;
-    }
+	public LocalizacaoDTO latitude(Double latitude) {
+		setLatitude(latitude);
+		return this;
+	}
 
-    public void setLatitude(Double latitude) {
-        this.latitude = latitude;
-    }
+	public LocalizacaoDTO longitude(Double longitude) {
+		setLongitude(longitude);
+		return this;
+	}
 
-    public Double getLongitude() {
-        return this.longitude;
-    }
+	@Override
+	public int hashCode() {
+		final var prime = 31;
+		int result = super.hashCode();
+		result = prime * result + Objects.hash(latitude, longitude);
+		return result;
+	}
 
-    public void setLongitude(Double longitude) {
-        this.longitude = longitude;
-    }
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj) {
+			return true;
+		}
+		if (!super.equals(obj)) {
+			return false;
+		}
+		if (!(obj instanceof LocalizacaoDTO)) {
+			return false;
+		}
+		LocalizacaoDTO other = (LocalizacaoDTO) obj;
+		return Objects.equals(latitude, other.latitude) && Objects.equals(longitude, other.longitude);
+	}
 
-    public Localizacao id(Long id) {
-        setId(id);
-        return this;
-    }
-
-    public Localizacao latitude(Double latitude) {
-        setLatitude(latitude);
-        return this;
-    }
-
-    public Localizacao longitude(Double longitude) {
-        setLongitude(longitude);
-        return this;
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (o == this)
-            return true;
-        if (!(o instanceof Localizacao)) {
-            return false;
-        }
-        var localizacao = (Localizacao) o;
-        return Objects.equals(id, localizacao.id) && Objects.equals(latitude, localizacao.latitude) && Objects.equals(longitude, localizacao.longitude);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(id, latitude, longitude);
-    }
-
-    @Override
-    public String toString() {
-        return "{" +
-            " id='" + getId() + "'" +
-            ", latitude='" + getLatitude() + "'" +
-            ", longitude='" + getLongitude() + "'" +
-            "}";
-    }
+	@Override
+	public String toString() {
+		return "LocalizacaoDTO [latitude=" + latitude + ", longitude=" + longitude + ", getDataCriacao()="
+				+ getDataCriacao() + ", getId()=" + getId() + "]";
+	}
 
 }

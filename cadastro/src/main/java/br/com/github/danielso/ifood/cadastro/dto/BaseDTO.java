@@ -2,14 +2,14 @@ package br.com.github.danielso.ifood.cadastro.dto;
 
 import java.util.Objects;
 
-public abstract class BaseEntityDTO {
+public abstract class BaseDTO {
 
 	private Long id;
 
-	protected BaseEntityDTO() {
+	protected BaseDTO() {
 	}
 
-	protected BaseEntityDTO(Long id) {
+	protected BaseDTO(Long id) {
 		this.id = id;
 	}
 
@@ -21,7 +21,7 @@ public abstract class BaseEntityDTO {
 		this.id = id;
 	}
 
-	public BaseEntityDTO id(Long id) {
+	public BaseDTO id(Long id) {
 		setId(id);
 		return this;
 	}
@@ -36,10 +36,10 @@ public abstract class BaseEntityDTO {
 		if (this == obj) {
 			return true;
 		}
-		if (!(obj instanceof BaseEntityDTO)) {
+		if (!(obj instanceof BaseDTO)) {
 			return false;
 		}
-		BaseEntityDTO other = (BaseEntityDTO) obj;
+		BaseDTO other = (BaseDTO) obj;
 		return Objects.equals(id, other.id);
 	}
 

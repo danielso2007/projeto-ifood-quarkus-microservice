@@ -1,3 +1,4 @@
+[![Projeto IFood Quarkus Microservice](https://github.com/danielso2007/projeto-ifood-quarkus-microservice/actions/workflows/maven.yml/badge.svg)](https://github.com/danielso2007/projeto-ifood-quarkus-microservice/actions/workflows/maven.yml)
 <!-- PROJECT SHIELDS -->
 <!--
 *** I'm using markdown "reference style" links for readability.
@@ -12,8 +13,6 @@
 [![Issues][issues-shield]][issues-url]
 [![MIT License][license-shield]][license-url]
 [![LinkedIn][linkedin-shield]][linkedin-url]
-
-
 
 <!-- PROJECT LOGO -->
 <br />
