@@ -1,11 +1,11 @@
-package br.com.github.danielso.ifood;
+package br.com.github.danielso.ifood.cadastro.resources;
 
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 
-@Path("/hello")
+@Path("/restaurantes")
 public class CadastroResource {
 
     @GET

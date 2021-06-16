@@ -1,0 +1,2 @@
+package br.com.github.danielso.ifood.cadastro.resources;public interface IDeleteController {
+}
