@@ -1,0 +1,54 @@
+# This workflow will build a Java project with Maven
+# For more information see: https://help.github.com/actions/language-and-framework-guides/building-and-testing-java-with-maven
+
+name: Projeto IFood Quarkus Microservice
+
+on:
+  push:
+    branches:
+    - main
+    - develop
+    - 'release/**'
+    tags:
+    - v*
+    paths-ignore:
+    - '**.md'
+    - '**.txt'
+    - '**.yml'
+    - '**.png'
+    - '**.sh'
+  pull_request:
+    branches:
+    - main
+    - develop
+    - 'release/**'
+    tags:
+    - v*
+jobs:
+   Test:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+    - name: Set up JDK 11
+      uses: actions/setup-java@v2
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        java-version: '11'
+        distribution: 'adopt'
+    - name: Test with Maven
+      run: |
+        mvn -q -am clean test
+   Build:
+    needs: Test
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+    - name: Set up JDK 11
+      uses: actions/setup-java@v2
+      with:
+        java-version: '11'
+        distribution: 'adopt'
+    - name: Build with Maven
+      run: |
+        mvn -q -am clean package install -Dmaven.test.skip=true
