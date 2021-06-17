@@ -6,6 +6,7 @@ import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 
+import br.com.github.danielso.ifood.cadastro.converter.RestauranteConverter;
 import br.com.github.danielso.ifood.cadastro.dto.RestauranteDTO;
 import br.com.github.danielso.ifood.cadastro.entities.Restaurante;
 import br.com.github.danielso.ifood.cadastro.repositories.RestauranteRepository;
@@ -20,8 +21,8 @@ public class RestauranteResource extends BaseResource<Restaurante, RestauranteDT
 	}
 	
 	@Inject
-	public RestauranteResource(RestauranteRepository repository) {
-		super(repository);
+	public RestauranteResource(RestauranteRepository repository, RestauranteConverter converter) {
+		super(repository, converter);
 	}
 
 }

@@ -2,9 +2,20 @@ package br.com.github.danielso.ifood.cadastro.dto;
 
 import java.util.Objects;
 
+import javax.validation.constraints.NotNull;
+
+import org.eclipse.microprofile.openapi.annotations.media.Schema;
+
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class LocalizacaoDTO extends AuditDTO {
 
+	@Schema(description = "Latitude da localização", example = "-22.9014599")
+	@NotNull(message = "A latitude não pode ser nula")
 	private Double latitude;
+	@Schema(description = "Longitude da localização", example = "-43.1068623")
+	@NotNull(message = "A longitude não pode ser nula")
 	private Double longitude;
 
 	public LocalizacaoDTO() {

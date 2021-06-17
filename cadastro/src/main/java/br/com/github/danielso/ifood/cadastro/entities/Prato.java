@@ -3,21 +3,35 @@ package br.com.github.danielso.ifood.cadastro.entities;
 import java.math.BigDecimal;
 import java.util.Objects;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
+
+import org.hibernate.validator.constraints.Length;
 
 @Entity
 @Table(name = "prato")
 public class Prato extends BaseAudit {
 
+	@NotEmpty(message = "O nome não pode ser vazio")
+	@NotNull(message = "O nome não pode ser nulo")
+	@Length(min = 2, max = 300)
+	@Column(length = 300, nullable = false)
 	private String nome;
-
+	@NotEmpty(message = "O descrição não pode ser vazio")
+	@NotNull(message = "O descrição não pode ser nulo")
+	@Length(min = 5, max = 500)
+	@Column(length = 500, nullable = false)
 	private String descricao;
 
 	@ManyToOne
+	@JoinColumn(name = "restaurante_id")
 	private Restaurante restaurante;
-
+	
 	private BigDecimal preco;
 
 	public Prato() {

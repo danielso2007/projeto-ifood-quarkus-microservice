@@ -2,14 +2,20 @@ package br.com.github.danielso.ifood.cadastro.entities;
 
 import java.util.Objects;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Table;
+import javax.validation.constraints.NotNull;
 
 @Entity
 @Table(name = "localizacao")
 public class Localizacao extends BaseAudit {
 
+	@NotNull(message = "A latitude não pode ser nula")
+	@Column(nullable = false)
 	private Double latitude;
+	@NotNull(message = "A longitude não pode ser nula")
+	@Column(nullable = false)
 	private Double longitude;
 
 	public Localizacao() {

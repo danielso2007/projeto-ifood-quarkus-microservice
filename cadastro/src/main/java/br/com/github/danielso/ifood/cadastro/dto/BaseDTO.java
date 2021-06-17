@@ -2,8 +2,14 @@ package br.com.github.danielso.ifood.cadastro.dto;
 
 import java.util.Objects;
 
+import org.eclipse.microprofile.openapi.annotations.media.Schema;
+
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
+@JsonIgnoreProperties(ignoreUnknown = true)
 public abstract class BaseDTO {
 
+	@Schema(description = "O identificador do registro", example = "123")
 	private Long id;
 
 	protected BaseDTO() {

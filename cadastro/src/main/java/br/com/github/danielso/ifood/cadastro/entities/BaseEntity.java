@@ -31,7 +31,7 @@ public abstract class BaseEntity extends PanacheEntityBase {
 		this.id = id;
 	}
 
-	public br.com.github.danielso.ifood.cadastro.entities.BaseEntity id(Long id) {
+	public BaseEntity id(Long id) {
 		setId(id);
 		return this;
 	}

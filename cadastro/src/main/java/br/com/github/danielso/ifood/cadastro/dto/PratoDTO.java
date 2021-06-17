@@ -3,11 +3,35 @@ package br.com.github.danielso.ifood.cadastro.dto;
 import java.math.BigDecimal;
 import java.util.Objects;
 
+import javax.validation.constraints.Max;
+import javax.validation.constraints.Min;
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
+
+import org.eclipse.microprofile.openapi.annotations.media.Schema;
+import org.hibernate.validator.constraints.Length;
+
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class PratoDTO extends AuditDTO {
 
+	@Schema(description = "O nome do prato", example = "Macarrão ao molhor vermelho")
+	@NotEmpty(message = "O nome não pode ser vazio")
+	@NotNull(message = "O nome não pode ser nulo")
+	@Length(min = 2, max = 300)
 	private String nome;
-	private String desccricao;
+	@Schema(description = "A desccrição do prato", example = "Feito com os melhores ingredientes")
+	@NotEmpty(message = "O descrição não pode ser vazio")
+	@NotNull(message = "O descrição não pode ser nulo")
+	@Length(min = 5, max = 500)
+	private String descricao;
+	@Schema(description = "O Restaurante dono do prato", example = "Ver objeto RestauranteDTO")
 	private RestauranteDTO restaurante;
+	@Schema(description = "O valor do prato", example = "58.98")
+	@NotNull(message = "O preço não pode ser nulo")
+	@Min(value = 0, message = "Valor não pode ser menor que 0 (Zero)")
+	@Max(value = 9999, message = "Valor não pode ser maior que 9999")
 	private BigDecimal preco;
 
 	public PratoDTO() {
@@ -15,7 +39,7 @@ public class PratoDTO extends AuditDTO {
 
 	public PratoDTO(String nome, String desccricao, RestauranteDTO restaurante, BigDecimal preco) {
 		this.nome = nome;
-		this.desccricao = desccricao;
+		this.descricao = desccricao;
 		this.restaurante = restaurante;
 		this.preco = preco;
 	}
@@ -28,12 +52,12 @@ public class PratoDTO extends AuditDTO {
 		this.nome = nome;
 	}
 
-	public String getDesccricao() {
-		return this.desccricao;
+	public String getDescricao() {
+		return this.descricao;
 	}
 
-	public void setDesccricao(String desccricao) {
-		this.desccricao = desccricao;
+	public void setDescricao(String descricao) {
+		this.descricao = descricao;
 	}
 
 	public RestauranteDTO getRestaurante() {
@@ -57,8 +81,8 @@ public class PratoDTO extends AuditDTO {
 		return this;
 	}
 
-	public PratoDTO desccricao(String desccricao) {
-		setDesccricao(desccricao);
+	public PratoDTO desccricao(String descricao) {
+		setDescricao(descricao);
 		return this;
 	}
 
@@ -76,7 +100,7 @@ public class PratoDTO extends AuditDTO {
 	public int hashCode() {
 		final var prime = 31;
 		int result = super.hashCode();
-		result = prime * result + Objects.hash(desccricao, nome, preco, restaurante);
+		result = prime * result + Objects.hash(descricao, nome, preco, restaurante);
 		return result;
 	}
 
@@ -92,13 +116,13 @@ public class PratoDTO extends AuditDTO {
 			return false;
 		}
 		PratoDTO other = (PratoDTO) obj;
-		return Objects.equals(desccricao, other.desccricao) && Objects.equals(nome, other.nome)
+		return Objects.equals(descricao, other.descricao) && Objects.equals(nome, other.nome)
 				&& Objects.equals(preco, other.preco) && Objects.equals(restaurante, other.restaurante);
 	}
 
 	@Override
 	public String toString() {
-		return "PratoDTO [nome=" + nome + ", desccricao=" + desccricao + ", restaurante=" + restaurante + ", preco="
+		return "PratoDTO [nome=" + nome + ", desccricao=" + descricao + ", restaurante=" + restaurante + ", preco="
 				+ preco + ", getDataCriacao()=" + getDataCriacao() + ", getDataAtualizacao()=" + getDataAtualizacao()
 				+ ", getId()=" + getId() + "]";
 	}

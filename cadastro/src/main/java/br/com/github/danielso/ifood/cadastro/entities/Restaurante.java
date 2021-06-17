@@ -1,23 +1,52 @@
 package br.com.github.danielso.ifood.cadastro.entities;
 
+import java.util.List;
 import java.util.Objects;
 
+import javax.persistence.CascadeType;
+import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import javax.validation.constraints.Min;
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Pattern;
+
+import org.hibernate.validator.constraints.Length;
 
 @Entity
 @Table(name = "restaurante")
 public class Restaurante extends BaseAudit {
 
+	@NotEmpty(message = "O nome do proprietário não pode ser vazio")
+	@NotNull(message = "O nome do proprietário não pode ser nulo")
+	@Length(min = 2, max = 300)
+	@Column(length = 300, nullable = false)
 	private String proprietario;
-
+	@NotEmpty(message = "O CNPJ do proprietário não pode ser vazio")
+	@NotNull(message = "O CNPJ do proprietário não pode ser nulo")
+	@Min(value = 14, message = "CNPJ não pode ser menor que 14 caracteres")
+	@Length(min = 14, max = 14, message = "CNPJ deve ter 14 números")
+	@Pattern(regexp = "^[0-9]{14}$", message = "CNPJ inválido")
+	@Column(length = 14, nullable = false)
 	private String cnpj;
-
+	@NotEmpty(message = "O nome não pode ser vazio")
+	@NotNull(message = "O nome não pode ser nulo")
+	@Length(min = 2, max = 300)
+	@Column(length = 300, nullable = false)
 	private String nome;
 
-	@ManyToOne
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "localizacao_id")
 	private Localizacao localizacao;
+
+	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+	@JoinColumn(name = "restaurante_id")
+	private List<Prato> pratos;
 
 	public Restaurante() {
 	}
@@ -59,6 +88,14 @@ public class Restaurante extends BaseAudit {
 
 	public void setLocalizacao(Localizacao localizacao) {
 		this.localizacao = localizacao;
+	}
+
+	public List<Prato> getPratos() {
+		return pratos;
+	}
+
+	public void setPratos(List<Prato> pratos) {
+		this.pratos = pratos;
 	}
 
 	public Restaurante proprietario(String proprietario) {

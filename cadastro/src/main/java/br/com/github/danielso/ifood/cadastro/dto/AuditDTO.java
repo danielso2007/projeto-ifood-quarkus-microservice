@@ -1,44 +1,52 @@
 package br.com.github.danielso.ifood.cadastro.dto;
 
-import java.util.Date;
+import java.time.LocalDateTime;
 import java.util.Objects;
 
+import org.eclipse.microprofile.openapi.annotations.media.Schema;
+
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
+@JsonIgnoreProperties(ignoreUnknown = true)
 public abstract class AuditDTO extends BaseDTO {
 
-	private Date dataCriacao;
+	
+	@Schema(description = "A data de criação do registro.", example = "2021-06-17T02:52:29.479316")
+	private LocalDateTime dataCriacao;
 
-	private Date dataAtualizacao;
+	@Schema(description = "A data de atualização do registro.", example = "2021-06-17T02:52:29.479316")
+	private LocalDateTime dataAtualizacao;
 
 	protected AuditDTO() {
 	}
 
-	protected AuditDTO(Date dataCriacao, Date dataAtualizacao) {
+	protected AuditDTO(LocalDateTime dataCriacao, LocalDateTime dataAtualizacao) {
 		this.dataCriacao = dataCriacao;
 		this.dataAtualizacao = dataAtualizacao;
 	}
 
-	public Date getDataCriacao() {
+	public LocalDateTime getDataCriacao() {
 		return this.dataCriacao;
 	}
 
-	public void setDataCriacao(Date dataCriacao) {
+	public void setDataCriacao(LocalDateTime dataCriacao) {
 		this.dataCriacao = dataCriacao;
 	}
 
-	public Date getDataAtualizacao() {
+	public LocalDateTime getDataAtualizacao() {
 		return this.dataAtualizacao;
 	}
 
-	public void setDataAtualizacao(Date dataAtualizacao) {
+	public void setDataAtualizacao(LocalDateTime dataAtualizacao) {
 		this.dataAtualizacao = dataAtualizacao;
 	}
 
-	public AuditDTO dataCriacao(Date dataCriacao) {
+	public AuditDTO dataCriacao(LocalDateTime dataCriacao) {
 		setDataCriacao(dataCriacao);
 		return this;
 	}
 
-	public AuditDTO dataAtualizacao(Date dataAtualizacao) {
+	public AuditDTO dataAtualizacao(LocalDateTime dataAtualizacao) {
 		setDataAtualizacao(dataAtualizacao);
 		return this;
 	}

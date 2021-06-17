@@ -1,58 +1,55 @@
 package br.com.github.danielso.ifood.cadastro.entities;
 
-import java.util.Date;
+import java.time.LocalDateTime;
 import java.util.Objects;
 
 import javax.persistence.Column;
 import javax.persistence.MappedSuperclass;
 
-import org.eclipse.microprofile.openapi.annotations.media.Schema;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
 @MappedSuperclass
 public abstract class BaseAudit extends BaseEntity {
 
-	@Schema(description = "A data de criação do registro.", example = "2020-02-16 21:22:27")
 	@CreationTimestamp
-	@Column(name = "data_criacao")
-	private Date dataCriacao;
+	@Column(name = "data_criacao", nullable = false)
+	private LocalDateTime dataCriacao;
 
-	@Schema(description = "A data de atualização do registro.", example = "2020-02-16 21:22:27")
 	@UpdateTimestamp
-	@Column(name = "data_atualizacao")
-	private Date dataAtualizacao;
+	@Column(name = "data_atualizacao", nullable = false)
+	private LocalDateTime dataAtualizacao;
 
 	protected BaseAudit() {
 	}
 
-	protected BaseAudit(Date dataCriacao, Date dataAtualizacao) {
+	protected BaseAudit(LocalDateTime dataCriacao, LocalDateTime dataAtualizacao) {
 		this.dataCriacao = dataCriacao;
 		this.dataAtualizacao = dataAtualizacao;
 	}
 
-	public Date getDataCriacao() {
+	public LocalDateTime getDataCriacao() {
 		return this.dataCriacao;
 	}
 
-	public void setDataCriacao(Date dataCriacao) {
+	public void setDataCriacao(LocalDateTime dataCriacao) {
 		this.dataCriacao = dataCriacao;
 	}
 
-	public Date getDataAtualizacao() {
+	public LocalDateTime getDataAtualizacao() {
 		return this.dataAtualizacao;
 	}
 
-	public void setDataAtualizacao(Date dataAtualizacao) {
+	public void setDataAtualizacao(LocalDateTime dataAtualizacao) {
 		this.dataAtualizacao = dataAtualizacao;
 	}
 
-	public BaseAudit dataCriacao(Date dataCriacao) {
+	public BaseAudit dataCriacao(LocalDateTime dataCriacao) {
 		setDataCriacao(dataCriacao);
 		return this;
 	}
 
-	public BaseAudit dataAtualizacao(Date dataAtualizacao) {
+	public BaseAudit dataAtualizacao(LocalDateTime dataAtualizacao) {
 		setDataAtualizacao(dataAtualizacao);
 		return this;
 	}
