@@ -37,9 +37,9 @@ public class Prato extends BaseAudit {
 	public Prato() {
 	}
 
-	public Prato(String nome, String desccricao, Restaurante restaurante, BigDecimal preco) {
+	public Prato(String nome, String descricao, Restaurante restaurante, BigDecimal preco) {
 		this.nome = nome;
-		this.descricao = desccricao;
+		this.descricao = descricao;
 		this.restaurante = restaurante;
 		this.preco = preco;
 	}
@@ -52,12 +52,12 @@ public class Prato extends BaseAudit {
 		this.nome = nome;
 	}
 
-	public String getDesccricao() {
+	public String getDescricao() {
 		return this.descricao;
 	}
 
-	public void setDesccricao(String desccricao) {
-		this.descricao = desccricao;
+	public void setDescricao(String descricao) {
+		this.descricao = descricao;
 	}
 
 	public Restaurante getRestaurante() {
@@ -81,8 +81,8 @@ public class Prato extends BaseAudit {
 		return this;
 	}
 
-	public Prato desccricao(String desccricao) {
-		setDesccricao(desccricao);
+	public Prato descricao(String descricao) {
+		setDescricao(descricao);
 		return this;
 	}
 
@@ -122,7 +122,8 @@ public class Prato extends BaseAudit {
 
 	@Override
 	public String toString() {
-		return "Prato [nome=" + nome + ", desccricao=" + descricao + ", restaurante=" + restaurante + ", preco="
+		return "Prato [nome=" + nome
+				+ ", descricao=" + descricao + ", restaurante=" + restaurante + ", preco="
 				+ preco + ", getDataCriacao()=" + getDataCriacao() + ", getDataAtualizacao()=" + getDataAtualizacao()
 				+ ", getId()=" + getId() + "]";
 	}

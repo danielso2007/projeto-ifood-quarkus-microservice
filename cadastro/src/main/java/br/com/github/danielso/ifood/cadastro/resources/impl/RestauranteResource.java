@@ -1,39 +1,48 @@
 package br.com.github.danielso.ifood.cadastro.resources.impl;
 
-import java.io.Serializable;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import javax.inject.Inject;
 import javax.transaction.Transactional;
+import javax.ws.rs.Consumes;
 import javax.ws.rs.NotFoundException;
+import javax.ws.rs.Path;
+import javax.ws.rs.Produces;
+import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
 
-import br.com.github.danielso.ifood.cadastro.converter.ConverterDTO;
-import br.com.github.danielso.ifood.cadastro.dto.BaseDTO;
+import br.com.github.danielso.ifood.cadastro.converter.RestauranteConverter;
+import br.com.github.danielso.ifood.cadastro.dto.RestauranteDTO;
 import br.com.github.danielso.ifood.cadastro.entities.BaseAudit;
-import br.com.github.danielso.ifood.cadastro.entities.BaseEntity;
-import br.com.github.danielso.ifood.cadastro.resources.IBaseResource;
-import io.quarkus.hibernate.orm.panache.PanacheRepositoryBase;
+import br.com.github.danielso.ifood.cadastro.entities.Restaurante;
+import br.com.github.danielso.ifood.cadastro.repositories.RestauranteRepository;
+import br.com.github.danielso.ifood.cadastro.resources.IRestauranteResource;
 import io.quarkus.panache.common.Sort;
 
-public abstract class BaseResource<E extends BaseEntity, D extends BaseDTO, K extends Serializable, R extends PanacheRepositoryBase<E, K>, C extends ConverterDTO<E, D>>  implements IBaseResource<E, D, K, R, C> {
+@Path("/restaurantes")
+@Produces(MediaType.APPLICATION_JSON)
+@Consumes(MediaType.APPLICATION_JSON)
+public class RestauranteResource implements
+		IRestauranteResource<Restaurante, RestauranteDTO, Long, RestauranteRepository, RestauranteConverter> {
 
-    private static final String DEFAULT_ORDER = "asc";
+	private static final String DEFAULT_ORDER = "asc";
 
-	private R repository;
-	private C converter;
+	private RestauranteRepository repository;
+	private RestauranteConverter converter;
 
-    protected BaseResource() {
+    public RestauranteResource() {
 	}
     
-    protected BaseResource(R repository, C converter) {
+    @Inject
+    public RestauranteResource(RestauranteRepository repository, RestauranteConverter converter) {
         this.repository = repository;
         this.converter = converter;
     }
 
     @Override
-    public List<D> getAll(String sortField, String order) {
+    public List<RestauranteDTO> getAll(String sortField, String order) {
         String[] fields = sortField.contains(",") ? sortField.split(",") : sortField.split(";");
         var sort = Sort.ascending(fields);
         if (!order.equals(DEFAULT_ORDER)) {
@@ -44,12 +53,12 @@ public abstract class BaseResource<E extends BaseEntity, D extends BaseDTO, K ex
     
     @Override
     @Transactional
-	public Response save(D dto) {
+	public Response save(RestauranteDTO dto) {
     	var entity = getConverter().dtoToEntity(dto);
     	entity.setId(null);
     	if (entity instanceof BaseAudit) {
-			((BaseAudit) entity).setDataCriacao(null);
-			((BaseAudit) entity).setDataAtualizacao(null);
+			entity.setDataCriacao(null);
+			entity.setDataAtualizacao(null);
 		}
     	getRepository().persist(entity);
     	return Response.status(Status.CREATED).build();
@@ -57,12 +66,12 @@ public abstract class BaseResource<E extends BaseEntity, D extends BaseDTO, K ex
 
 	@Override
 	@Transactional
-	public Response update(K id, D dto) {
+	public Response update(Long id, RestauranteDTO dto) {
         getRepository().findByIdOptional(id).ifPresentOrElse(entity -> {
 			var p = getConverter().dtoToEntity(dto, entity);
 			if (entity instanceof BaseAudit) {
-				((BaseAudit) p).setDataCriacao(((BaseAudit) entity).getDataCriacao());
-				((BaseAudit) p).setDataAtualizacao(((BaseAudit) entity).getDataAtualizacao());
+				p.setDataCriacao(entity.getDataCriacao());
+				p.setDataAtualizacao(entity.getDataAtualizacao());
 			}
 			getRepository().persist(p);
 		}, NotFoundException::new);
@@ -70,24 +79,25 @@ public abstract class BaseResource<E extends BaseEntity, D extends BaseDTO, K ex
 	}
 
     @Override
-    public D getById(K id) {
+    public RestauranteDTO getById(Long id) {
         return getConverter().entityToDto(getRepository().findByIdOptional(id).orElseThrow(NotFoundException::new));
     }
 
     @Override
     @Transactional
-    public Response delete(K id) {
+    public Response delete(Long id) {
         getRepository().delete(getRepository().findByIdOptional(id).orElseThrow(NotFoundException::new));
         return Response.status(Status.OK).build();
     }
 
     @Override
-	public R getRepository() {
+	public RestauranteRepository getRepository() {
         return repository;
     }
     
     @Override
-	public C getConverter() {
+	public RestauranteConverter getConverter() {
         return converter;
     }
+
 }

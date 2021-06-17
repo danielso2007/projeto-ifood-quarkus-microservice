@@ -37,9 +37,9 @@ public class PratoDTO extends AuditDTO {
 	public PratoDTO() {
 	}
 
-	public PratoDTO(String nome, String desccricao, RestauranteDTO restaurante, BigDecimal preco) {
+	public PratoDTO(String nome, String descricao, RestauranteDTO restaurante, BigDecimal preco) {
 		this.nome = nome;
-		this.descricao = desccricao;
+		this.descricao = descricao;
 		this.restaurante = restaurante;
 		this.preco = preco;
 	}
@@ -81,7 +81,7 @@ public class PratoDTO extends AuditDTO {
 		return this;
 	}
 
-	public PratoDTO desccricao(String descricao) {
+	public PratoDTO descricao(String descricao) {
 		setDescricao(descricao);
 		return this;
 	}
@@ -122,7 +122,8 @@ public class PratoDTO extends AuditDTO {
 
 	@Override
 	public String toString() {
-		return "PratoDTO [nome=" + nome + ", desccricao=" + descricao + ", restaurante=" + restaurante + ", preco="
+		return "PratoDTO [nome=" + nome
+				+ ", descricao=" + descricao + ", restaurante=" + restaurante + ", preco="
 				+ preco + ", getDataCriacao()=" + getDataCriacao() + ", getDataAtualizacao()=" + getDataAtualizacao()
 				+ ", getId()=" + getId() + "]";
 	}

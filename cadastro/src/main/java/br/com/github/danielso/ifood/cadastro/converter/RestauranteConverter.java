@@ -29,7 +29,7 @@ public class RestauranteConverter implements ConverterDTO<Restaurante, Restauran
 		entity.cnpj(dto.getCnpj());
 		entity.proprietario(dto.getProprietario());
 		entity.nome(dto.getNome());
-		dto.dataCriacao(dto.getDataCriacao());
+		entity.dataCriacao(dto.getDataCriacao());
 		entity.dataAtualizacao(dto.getDataAtualizacao());		
 		return entity;
 	}
