@@ -26,7 +26,7 @@ public class PratoDTO extends AuditDTO {
 	@NotNull(message = "O descrição não pode ser nulo")
 	@Length(min = 5, max = 500)
 	private String descricao;
-	@Schema(description = "O Restaurante dono do prato", example = "Ver objeto RestauranteDTO")
+	@Schema(description = "O Restaurante dono do prato", example = "Ver objeto RestauranteDTO", hidden = true)
 	private RestauranteDTO restaurante;
 	@Schema(description = "O valor do prato", example = "58.98")
 	@NotNull(message = "O preço não pode ser nulo")

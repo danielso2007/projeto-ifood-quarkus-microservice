@@ -10,6 +10,8 @@ import javax.ws.rs.DefaultValue;
 import javax.ws.rs.NotFoundException;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.QueryParam;
+import javax.ws.rs.core.Response;
+import javax.ws.rs.core.Response.Status;
 
 import br.com.github.danielso.ifood.cadastro.converter.ConverterDTO;
 import br.com.github.danielso.ifood.cadastro.dto.BaseDTO;
@@ -47,7 +49,7 @@ public abstract class BaseResource<E extends BaseEntity, D extends BaseDTO, K ex
     
     @Override
     @Transactional
-	public void save(@Valid D dto) {
+	public Response save(@Valid D dto) {
     	var entity = getConverter().dtoToEntity(dto);
     	entity.setId(null);
     	if (entity instanceof BaseAudit) {
@@ -55,20 +57,21 @@ public abstract class BaseResource<E extends BaseEntity, D extends BaseDTO, K ex
 			((BaseAudit) entity).setDataAtualizacao(null);
 		}
     	getRepository().persist(entity);
+    	return Response.status(Status.CREATED).build();
 	}
 
 	@Override
 	@Transactional
-	public void update(@PathParam(DEFAULT_SORT_COLUMN) K id, @Valid D dto) {
+	public Response update(@PathParam(DEFAULT_SORT_COLUMN) K id, @Valid D dto) {
         getRepository().findByIdOptional(id).ifPresentOrElse(entity -> {
 			var p = getConverter().dtoToEntity(dto, entity);
-			p.setId(entity.getId());
 			if (entity instanceof BaseAudit) {
 				((BaseAudit) p).setDataCriacao(((BaseAudit) entity).getDataCriacao());
 				((BaseAudit) p).setDataAtualizacao(((BaseAudit) entity).getDataAtualizacao());
 			}
 			getRepository().persist(p);
 		}, NotFoundException::new);
+        return Response.status(Status.OK).build();
 	}
 
     @Override
@@ -78,8 +81,9 @@ public abstract class BaseResource<E extends BaseEntity, D extends BaseDTO, K ex
 
     @Override
     @Transactional
-    public void delete(@PathParam(DEFAULT_SORT_COLUMN) K id) {
+    public Response delete(@PathParam(DEFAULT_SORT_COLUMN) K id) {
         getRepository().delete(getRepository().findByIdOptional(id).orElseThrow(NotFoundException::new));
+        return Response.status(Status.OK).build();
     }
 
     @Override

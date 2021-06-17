@@ -26,7 +26,6 @@ public class RestauranteConverter implements ConverterDTO<Restaurante, Restauran
 		if (persistenceEntity != null) {
 			entity = persistenceEntity;
 		}
-		entity.id(dto.getId());
 		entity.cnpj(dto.getCnpj());
 		entity.proprietario(dto.getProprietario());
 		entity.nome(dto.getNome());

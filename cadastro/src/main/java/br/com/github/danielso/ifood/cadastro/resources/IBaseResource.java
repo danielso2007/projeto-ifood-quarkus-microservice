@@ -12,6 +12,7 @@ import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.QueryParam;
+import javax.ws.rs.core.Response;
 
 import org.eclipse.microprofile.openapi.annotations.responses.APIResponse;
 import org.eclipse.microprofile.openapi.annotations.responses.APIResponses;
@@ -32,18 +33,18 @@ public interface IBaseResource <E extends BaseEntity, D extends BaseDTO, K exten
     
     @POST
     @APIResponses(value = {
-            @APIResponse(responseCode = "204", description = "Registro criado com sucesso"),
+            @APIResponse(responseCode = "201", description = "Registro criado com sucesso"),
             @APIResponse(responseCode = "404", description = "Não foi possível cadastrar o registro."),
             @APIResponse(responseCode = "500", description = "Erro interno do servidor") })
-    void save(@Valid D dto);
+    Response save(@Valid D dto);
 
     @PUT
     @Path("{id}")
     @APIResponses(value = {
-            @APIResponse(responseCode = "204", description = "Registro atualizado com sucesso"),
+            @APIResponse(responseCode = "200", description = "Registro atualizado com sucesso"),
             @APIResponse(responseCode = "404", description = "Registro não encontrado."),
             @APIResponse(responseCode = "500", description = "Erro interno do servidor") })
-    void update(@PathParam("id") K id, @Valid D dto);
+    Response update(@PathParam("id") K id, @Valid D dto);
 
     @GET
 	@Path("{id}")
@@ -56,10 +57,10 @@ public interface IBaseResource <E extends BaseEntity, D extends BaseDTO, K exten
     @DELETE
     @Path("{id}")
     @APIResponses(value = {
-            @APIResponse(responseCode = "204", description = "Registro deletado com sucesso"),
+            @APIResponse(responseCode = "200", description = "Registro deletado com sucesso"),
             @APIResponse(responseCode = "404", description = "Registro não encontrado."),
             @APIResponse(responseCode = "500", description = "Erro interno do servidor")})
-    void delete(@PathParam("id") K id);
+    Response delete(@PathParam("id") K id);
 
     R getRepository();
 

@@ -30,7 +30,7 @@ public class RestauranteDTO extends AuditDTO {
 	@NotNull(message = "O nome não pode ser nulo")
 	@Length(min = 2, max = 300)
 	private String nome;
-	@Schema(description = "A localização do Restaurante", example = "Ver objeto LocalizacaoDTO")
+	@Schema(description = "A localização do Restaurante", example = "Ver objeto LocalizacaoDTO", hidden = true)
 	private LocalizacaoDTO localizacao;
 
 	public RestauranteDTO() {
