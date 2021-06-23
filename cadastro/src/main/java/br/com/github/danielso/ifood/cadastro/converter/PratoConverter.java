@@ -14,8 +14,9 @@ public class PratoConverter implements ConverterDTO<Prato, PratoDTO> {
 		dto.id(entity.getId());
 		dto.nome(entity.getNome());
 		dto.descricao(entity.getDescricao());
+		dto.setPreco(entity.getPreco());
 		dto.dataCriacao(entity.getDataCriacao());
-		dto.dataAtualizacao(entity.getDataAtualizacao());		
+		dto.dataAtualizacao(entity.getDataAtualizacao());
 		return dto;
 	}
 
@@ -24,11 +25,13 @@ public class PratoConverter implements ConverterDTO<Prato, PratoDTO> {
 		var entity = new Prato();
 		if (persistenceEntity != null) {
 			entity = persistenceEntity;
+		} else {
+			entity.dataCriacao(dto.getDataCriacao());
+			entity.dataAtualizacao(dto.getDataAtualizacao());		
 		}
 		entity.nome(dto.getNome());
-		entity.descricao(entity.getDescricao());
-		entity.dataCriacao(dto.getDataCriacao());
-		entity.dataAtualizacao(dto.getDataAtualizacao());		
+		entity.descricao(dto.getDescricao());
+		entity.setPreco(dto.getPreco());
 		return entity;
 	}
 

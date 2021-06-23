@@ -25,12 +25,13 @@ public class RestauranteConverter implements ConverterDTO<Restaurante, Restauran
 		var entity = new Restaurante();
 		if (persistenceEntity != null) {
 			entity = persistenceEntity;
+		} else {
+			entity.dataCriacao(dto.getDataCriacao());
+			entity.dataAtualizacao(dto.getDataAtualizacao());		
 		}
 		entity.cnpj(dto.getCnpj());
 		entity.proprietario(dto.getProprietario());
 		entity.nome(dto.getNome());
-		entity.dataCriacao(dto.getDataCriacao());
-		entity.dataAtualizacao(dto.getDataAtualizacao());		
 		return entity;
 	}
 

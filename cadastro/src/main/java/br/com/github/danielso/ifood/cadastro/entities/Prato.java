@@ -8,6 +8,8 @@ import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+import javax.validation.constraints.Max;
+import javax.validation.constraints.Min;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 
@@ -32,6 +34,10 @@ public class Prato extends BaseAudit {
 	@JoinColumn(name = "restaurante_id")
 	private Restaurante restaurante;
 	
+	@NotNull(message = "O preço não pode ser nulo")
+	@Min(value = 0, message = "Valor não pode ser menor que 0 (Zero)")
+	@Max(value = 9999, message = "Valor não pode ser maior que 9999")
+	@Column(nullable = false)
 	private BigDecimal preco;
 
 	public Prato() {

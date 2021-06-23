@@ -53,7 +53,7 @@ public class PratoDTO extends AuditDTO {
 	}
 
 	public String getDescricao() {
-		return this.descricao;
+		return descricao;
 	}
 
 	public void setDescricao(String descricao) {
