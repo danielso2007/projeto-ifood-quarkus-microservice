@@ -1,0 +1,18 @@
+[
+  {
+    "id": 20,
+    "dataAtualizacao": "2021-01-01T00:00:00",
+    "dataCriacao": "2021-01-01T00:00:00",
+    "cnpj": "68454478000125",
+    "nome": "Olympe",
+    "proprietario": "Hugo Ricardo Carlos Pinto"
+  },
+  {
+    "id": 10,
+    "dataAtualizacao": "2021-01-01T00:00:00",
+    "dataCriacao": "2021-01-01T00:00:00",
+    "cnpj": "68454478000125",
+    "nome": "A Casa do Porco",
+    "proprietario": "Betina Laura Jéssica Almada"
+  }
+]

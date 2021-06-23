@@ -1,5 +1,5 @@
 
-package br.com.github.danielso.ifood.cadastro.resources.impl;
+package br.com.github.danielso.ifood.cadastro.resources;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -36,7 +36,7 @@ import br.com.github.danielso.ifood.cadastro.repositories.PratoRepository;
 import br.com.github.danielso.ifood.cadastro.repositories.RestauranteRepository;
 import io.quarkus.panache.common.Sort;
 
-@Path(Constants.API_VERSION + "/restaurantes")
+@Path(Constants.API_VERSION + Constants.REST_RESTAURANTE)
 @Produces(MediaType.APPLICATION_JSON)
 @Consumes(MediaType.APPLICATION_JSON)
 public class PratosResource {
@@ -45,25 +45,19 @@ public class PratosResource {
 	private static final String TAG_DESCRIPTION = "Representa os pratos de um restaurante";
 	private static final String DEFAULT_ORDER = "asc";
 
-	private PratoRepository repository;
-	private PratoConverter converter;
-	private RestauranteRepository restauranteRepository;
+	@Inject
+	PratoRepository repository;
+	@Inject
+	PratoConverter converter;
+	@Inject
+	RestauranteRepository restauranteRepository;
 
 	public PratosResource() {
 		// Construtor padrão.
 	}
 
-	@Inject
-	public PratosResource(PratoRepository repository, PratoConverter converter,
-			RestauranteRepository restauranteRepository) {
-		super();
-		this.repository = repository;
-		this.converter = converter;
-		this.restauranteRepository = restauranteRepository;
-	}
-
 	@GET
-	@Path("{idRestaurante}/pratos")
+	@Path("{idRestaurante}" + Constants.REST_PRATO)
 	@APIResponses(value = { @APIResponse(responseCode = "200", description = "Registros listados com sucesso"),
 			@APIResponse(responseCode = "400", description = "Erro na obtenção dos dados ou filtro"),
 			@APIResponse(responseCode = "500", description = "Erro interno do servidor") })
@@ -81,7 +75,7 @@ public class PratosResource {
 	}
 
 	@POST
-	@Path("{idRestaurante}/pratos")
+	@Path("{idRestaurante}" + Constants.REST_PRATO)
 	@APIResponses(value = { @APIResponse(responseCode = "201", description = "Registro criado com sucesso"),
 			@APIResponse(responseCode = "404", description = "Não foi possível cadastrar o registro."),
 			@APIResponse(responseCode = "500", description = "Erro interno do servidor") })
@@ -100,7 +94,7 @@ public class PratosResource {
 	}
 
 	@PUT
-	@Path("{idRestaurante}/pratos/{id}")
+	@Path("{idRestaurante}" + Constants.REST_PRATO + "/{id}")
 	@APIResponses(value = { @APIResponse(responseCode = "200", description = "Registro atualizado com sucesso"),
 			@APIResponse(responseCode = "404", description = "Registro não encontrado."),
 			@APIResponse(responseCode = "500", description = "Erro interno do servidor") })
@@ -119,7 +113,7 @@ public class PratosResource {
 	}
 
 	@GET
-	@Path("{idRestaurante}/pratos/{id}")
+	@Path("{idRestaurante}" + Constants.REST_PRATO + "/{id}")
 	@APIResponses(value = { @APIResponse(responseCode = "200", description = "Registro carregado com sucesso."),
 			@APIResponse(responseCode = "404", description = "Registro não encontrado."),
 			@APIResponse(responseCode = "500", description = "Erro interno do servidor") })
@@ -132,7 +126,7 @@ public class PratosResource {
 	}
 
 	@DELETE
-	@Path("{idRestaurante}/pratos/{id}")
+	@Path("{idRestaurante}" + Constants.REST_PRATO + "/{id}")
 	@APIResponses(value = { @APIResponse(responseCode = "200", description = "Registro deletado com sucesso"),
 			@APIResponse(responseCode = "404", description = "Registro não encontrado."),
 			@APIResponse(responseCode = "500", description = "Erro interno do servidor") })

@@ -1,4 +1,4 @@
-package br.com.github.danielso.ifood.cadastro.resources.impl;
+package br.com.github.danielso.ifood.cadastro.resources;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -33,31 +33,24 @@ import br.com.github.danielso.ifood.cadastro.entities.Restaurante;
 import br.com.github.danielso.ifood.cadastro.repositories.RestauranteRepository;
 import io.quarkus.panache.common.Sort;
 
-@Path(Constants.API_VERSION + "/restaurantes")
+@Path(Constants.API_VERSION + Constants.REST_RESTAURANTE)
 @Produces(MediaType.APPLICATION_JSON)
 @Consumes(MediaType.APPLICATION_JSON)
 public class RestauranteResource {
 
 	private static final String TAG = "Restaurantes";
-
 	private static final String TAG_DESCRIPTION = "Representa os restaurantes";
-
 	private static final String DEFAULT_ORDER = "asc";
 
-	private RestauranteRepository repository;
-	private RestauranteConverter converter;
+	@Inject
+	RestauranteRepository repository;
+	@Inject
+	RestauranteConverter converter;
 
 	public RestauranteResource() {
 		// Construtor padrão.
 	}
 	
-	@Inject
-	public RestauranteResource(RestauranteRepository repository, RestauranteConverter converter) {
-		super();
-		this.repository = repository;
-		this.converter = converter;
-	}
-
 	@GET
 	@APIResponses(value = { @APIResponse(responseCode = "200", description = "Registros listados com sucesso"),
 			@APIResponse(responseCode = "400", description = "Erro na obtenção dos dados ou filtro"),

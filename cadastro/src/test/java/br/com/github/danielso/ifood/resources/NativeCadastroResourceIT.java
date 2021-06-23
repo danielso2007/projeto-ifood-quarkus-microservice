@@ -1,4 +1,4 @@
-package br.com.github.danielso.ifood;
+package br.com.github.danielso.ifood.resources;
 
 import io.quarkus.test.junit.NativeImageTest;
 
