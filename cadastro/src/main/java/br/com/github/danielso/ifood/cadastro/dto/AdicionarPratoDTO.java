@@ -1,52 +1,45 @@
-package br.com.github.danielso.ifood.cadastro.entities;
+package br.com.github.danielso.ifood.cadastro.dto;
 
 import java.math.BigDecimal;
 import java.util.Objects;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Index;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.Table;
-import javax.persistence.UniqueConstraint;
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 
+import org.eclipse.microprofile.openapi.annotations.media.Schema;
 import org.hibernate.validator.constraints.Length;
 
-@Entity
-@Table(name = "prato", indexes = {
-		@Index(name = "indexPratosNome", columnList = "nome") }, uniqueConstraints = @UniqueConstraint(columnNames = "nome"))
-public class Prato extends BaseAudit {
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
+@JsonIgnoreProperties(ignoreUnknown = true)
+public class AdicionarPratoDTO {
+
+	@Schema(description = "O nome do prato", example = "Macarrão ao molhor vermelho")
 	@NotEmpty(message = "O nome não pode ser vazio")
 	@NotNull(message = "O nome não pode ser nulo")
 	@Length(min = 2, max = 300)
-	@Column(length = 300, nullable = false)
 	private String nome;
+	@Schema(description = "A desccrição do prato", example = "Feito com os melhores ingredientes")
 	@NotEmpty(message = "O descrição não pode ser vazio")
 	@NotNull(message = "O descrição não pode ser nulo")
 	@Length(min = 5, max = 500)
-	@Column(length = 500, nullable = false)
 	private String descricao;
-
-	@ManyToOne
-	@JoinColumn(name = "restaurante_id", nullable = false)
-	private Restaurante restaurante;
-
+	@Schema(description = "O Restaurante dono do prato", example = "Ver objeto RestauranteDTO", hidden = true)
+	@JsonIgnore
+	private RestauranteDTO restaurante;
+	@Schema(description = "O valor do prato", example = "58.98")
 	@NotNull(message = "O preço não pode ser nulo")
 	@Min(value = 0, message = "Valor não pode ser menor que 0 (Zero)")
 	@Max(value = 9999, message = "Valor não pode ser maior que 9999")
-	@Column(nullable = false)
 	private BigDecimal preco;
 
-	public Prato() {
+	public AdicionarPratoDTO() {
 	}
 
-	public Prato(String nome, String descricao, Restaurante restaurante, BigDecimal preco) {
+	public AdicionarPratoDTO(String nome, String descricao, RestauranteDTO restaurante, BigDecimal preco) {
 		this.nome = nome;
 		this.descricao = descricao;
 		this.restaurante = restaurante;
@@ -62,18 +55,18 @@ public class Prato extends BaseAudit {
 	}
 
 	public String getDescricao() {
-		return this.descricao;
+		return descricao;
 	}
 
 	public void setDescricao(String descricao) {
 		this.descricao = descricao;
 	}
 
-	public Restaurante getRestaurante() {
+	public RestauranteDTO getRestaurante() {
 		return this.restaurante;
 	}
 
-	public void setRestaurante(Restaurante restaurante) {
+	public void setRestaurante(RestauranteDTO restaurante) {
 		this.restaurante = restaurante;
 	}
 
@@ -85,22 +78,22 @@ public class Prato extends BaseAudit {
 		this.preco = preco;
 	}
 
-	public Prato nome(String nome) {
+	public AdicionarPratoDTO nome(String nome) {
 		setNome(nome);
 		return this;
 	}
 
-	public Prato descricao(String descricao) {
+	public AdicionarPratoDTO descricao(String descricao) {
 		setDescricao(descricao);
 		return this;
 	}
 
-	public Prato restaurante(Restaurante restaurante) {
+	public AdicionarPratoDTO restaurante(RestauranteDTO restaurante) {
 		setRestaurante(restaurante);
 		return this;
 	}
 
-	public Prato preco(BigDecimal preco) {
+	public AdicionarPratoDTO preco(BigDecimal preco) {
 		setPreco(preco);
 		return this;
 	}
@@ -121,19 +114,18 @@ public class Prato extends BaseAudit {
 		if (!super.equals(obj)) {
 			return false;
 		}
-		if (!(obj instanceof Prato)) {
+		if (!(obj instanceof AdicionarPratoDTO)) {
 			return false;
 		}
-		Prato other = (Prato) obj;
+		AdicionarPratoDTO other = (AdicionarPratoDTO) obj;
 		return Objects.equals(descricao, other.descricao) && Objects.equals(nome, other.nome)
 				&& Objects.equals(preco, other.preco) && Objects.equals(restaurante, other.restaurante);
 	}
 
 	@Override
 	public String toString() {
-		return "Prato [nome=" + nome + ", descricao=" + descricao + ", restaurante=" + restaurante + ", preco=" + preco
-				+ ", getDataCriacao()=" + getDataCriacao() + ", getDataAtualizacao()=" + getDataAtualizacao()
-				+ ", getId()=" + getId() + "]";
+		return "PratoDTO [nome=" + nome + ", descricao=" + descricao + ", restaurante=" + restaurante + ", preco="
+				+ preco + "]";
 	}
 
 }
