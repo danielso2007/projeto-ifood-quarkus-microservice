@@ -21,7 +21,7 @@ import javax.validation.constraints.Pattern;
 import org.hibernate.validator.constraints.Length;
 
 @Entity
-@Table(name = "restaurante", indexes = {@Index(name = "indexRestauranteNome", columnList = "nome, cnpj")}, uniqueConstraints = @UniqueConstraint(columnNames = "nome"))
+@Table(name = "restaurante", indexes = {@Index(name = "indexRestauranteNome", columnList = "nome")}, uniqueConstraints = @UniqueConstraint(columnNames = "nome"))
 public class Restaurante extends BaseAudit {
 
 	@NotEmpty(message = "O nome do proprietário não pode ser vazio")

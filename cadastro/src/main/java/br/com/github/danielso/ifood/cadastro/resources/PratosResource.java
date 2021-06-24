@@ -29,7 +29,9 @@ import org.eclipse.microprofile.openapi.annotations.responses.APIResponse;
 import org.eclipse.microprofile.openapi.annotations.responses.APIResponses;
 import org.eclipse.microprofile.openapi.annotations.tags.Tag;
 
-import br.com.github.danielso.ifood.cadastro.Constants;
+import br.com.github.danielso.ifood.cadastro.commons.Constants;
+import br.com.github.danielso.ifood.cadastro.commons.response.ConstraintViolationResponse;
+import br.com.github.danielso.ifood.cadastro.commons.response.ErrorResponse;
 import br.com.github.danielso.ifood.cadastro.dto.AdicionarPratoDTO;
 import br.com.github.danielso.ifood.cadastro.dto.PratoDTO;
 import br.com.github.danielso.ifood.cadastro.entities.Prato;
@@ -64,7 +66,7 @@ public class PratosResource {
 	@APIResponses(value = {
 			@APIResponse(responseCode = "200", description = "Registros listados com sucesso", content = @Content(mediaType = "application/json", schema = @Schema(type = SchemaType.ARRAY, implementation = PratoDTO.class))),
 			@APIResponse(responseCode = "400", description = "Erro na obtenção dos dados ou filtro", content = @Content(mediaType = "application/json")),
-			@APIResponse(responseCode = "500", description = "Erro interno do servidor", content = @Content(mediaType = "application/json")) })
+			@APIResponse(responseCode = "500", description = "Erro interno do servidor", content = @Content(mediaType = "application/json", schema = @Schema(allOf = ErrorResponse.class))) })
 	@Tag(name = TAG, description = TAG_DESCRIPTION)
 	public List<PratoDTO> getAll(@PathParam("idRestaurante") Long idRestaurante,
 			@QueryParam("sort") @DefaultValue("id") String sortField,
@@ -81,8 +83,9 @@ public class PratosResource {
 	@Path("{idRestaurante}" + Constants.REST_PRATO)
 	@APIResponses(value = {
 			@APIResponse(responseCode = "201", description = "Registro criado com sucesso", content = @Content(mediaType = "application/json", schema = @Schema(type = SchemaType.OBJECT, implementation = PratoDTO.class))),
+			@APIResponse(responseCode = "400", description = "Erro na obtenção dos dados ou filtro", content = @Content(mediaType = "application/json", schema = @Schema(allOf = ConstraintViolationResponse.class))),
 			@APIResponse(responseCode = "404", description = "Não foi possível cadastrar o registro.", content = @Content(mediaType = "application/json")),
-			@APIResponse(responseCode = "500", description = "Erro interno do servidor", content = @Content(mediaType = "application/json")) })
+			@APIResponse(responseCode = "500", description = "Erro interno do servidor", content = @Content(mediaType = "application/json", schema = @Schema(allOf = ErrorResponse.class))) })
 	@Tag(name = TAG, description = TAG_DESCRIPTION)
 	@Transactional
 	public Response save(@PathParam("idRestaurante") Long idRestaurante, @Valid AdicionarPratoDTO dto) {
@@ -96,8 +99,9 @@ public class PratosResource {
 	@Path("{idRestaurante}" + Constants.REST_PRATO + "/{id}")
 	@APIResponses(value = {
 			@APIResponse(responseCode = "200", description = "Registro atualizado com sucesso", content = @Content(mediaType = "application/json", schema = @Schema(type = SchemaType.OBJECT, implementation = PratoDTO.class))),
+			@APIResponse(responseCode = "400", description = "Erro na obtenção dos dados ou filtro", content = @Content(mediaType = "application/json", schema = @Schema(allOf = ConstraintViolationResponse.class))),
 			@APIResponse(responseCode = "404", description = "Registro não encontrado.", content = @Content(mediaType = "application/json")),
-			@APIResponse(responseCode = "500", description = "Erro interno do servidor", content = @Content(mediaType = "application/json")) })
+			@APIResponse(responseCode = "500", description = "Erro interno do servidor", content = @Content(mediaType = "application/json", schema = @Schema(allOf = ErrorResponse.class))) })
 	@Tag(name = TAG, description = TAG_DESCRIPTION)
 	@Transactional
 	public Response update(@PathParam("idRestaurante") Long idRestaurante, @PathParam("id") Long id,
@@ -113,7 +117,7 @@ public class PratosResource {
 	@APIResponses(value = {
 			@APIResponse(responseCode = "200", description = "Registro carregado com sucesso.", content = @Content(mediaType = "application/json", schema = @Schema(type = SchemaType.OBJECT, implementation = PratoDTO.class))),
 			@APIResponse(responseCode = "404", description = "Registro não encontrado.", content = @Content(mediaType = "application/json")),
-			@APIResponse(responseCode = "500", description = "Erro interno do servidor", content = @Content(mediaType = "application/json")) })
+			@APIResponse(responseCode = "500", description = "Erro interno do servidor", content = @Content(mediaType = "application/json", schema = @Schema(allOf = ErrorResponse.class))) })
 	@Tag(name = TAG, description = TAG_DESCRIPTION)
 	public PratoDTO getById(@PathParam("idRestaurante") Long idRestaurante, @PathParam("id") Long id) {
 		return repository.findByIdOptional(id).map(mapper::toPratoDTO).orElseThrow(NotFoundException::new);
@@ -123,7 +127,7 @@ public class PratosResource {
 	@Path("{idRestaurante}" + Constants.REST_PRATO + "/{id}")
 	@APIResponses(value = { @APIResponse(responseCode = "200", description = "Registro deletado com sucesso"),
 			@APIResponse(responseCode = "404", description = "Registro não encontrado.", content = @Content(mediaType = "application/json")),
-			@APIResponse(responseCode = "500", description = "Erro interno do servidor", content = @Content(mediaType = "application/json")) })
+			@APIResponse(responseCode = "500", description = "Erro interno do servidor", content = @Content(mediaType = "application/json", schema = @Schema(allOf = ErrorResponse.class))) })
 	@Tag(name = TAG, description = TAG_DESCRIPTION)
 	@Transactional
 	public Response delete(@PathParam("idRestaurante") Long idRestaurante, @PathParam("id") Long id) {

@@ -27,6 +27,8 @@ on:
 jobs:
    Test:
     runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
     steps:
     - uses: actions/checkout@v2
     - name: Set up JDK 11
@@ -42,6 +44,8 @@ jobs:
    Build:
     needs: Test
     runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
     steps:
     - uses: actions/checkout@v2
     - name: Set up JDK 11
