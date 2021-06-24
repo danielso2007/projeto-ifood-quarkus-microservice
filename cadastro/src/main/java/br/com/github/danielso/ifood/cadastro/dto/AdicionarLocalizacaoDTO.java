@@ -1,30 +1,27 @@
-package br.com.github.danielso.ifood.cadastro.entities;
+package br.com.github.danielso.ifood.cadastro.dto;
 
 import java.util.Objects;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.OneToOne;
-import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 
-@Entity
-@Table(name = "localizacao")
-public class Localizacao extends BaseAudit {
+import org.eclipse.microprofile.openapi.annotations.media.Schema;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
+@JsonIgnoreProperties(ignoreUnknown = true)
+public class AdicionarLocalizacaoDTO {
+
+	@Schema(description = "Latitude da localização", example = "-22.9014599")
 	@NotNull(message = "A latitude não pode ser nula")
-	@Column(nullable = false)
 	private Double latitude;
+	@Schema(description = "Longitude da localização", example = "-43.1068623")
 	@NotNull(message = "A longitude não pode ser nula")
-	@Column(nullable = false)
 	private Double longitude;
-	@OneToOne(mappedBy = "localizacao")
-	private Restaurante restaurante;
 
-	public Localizacao() {
+	public AdicionarLocalizacaoDTO() {
 	}
 
-	public Localizacao(Double latitude, Double longitude) {
+	public AdicionarLocalizacaoDTO(Double latitude, Double longitude) {
 		this.latitude = latitude;
 		this.longitude = longitude;
 	}
@@ -45,22 +42,14 @@ public class Localizacao extends BaseAudit {
 		this.longitude = longitude;
 	}
 
-	public Localizacao latitude(Double latitude) {
+	public AdicionarLocalizacaoDTO latitude(Double latitude) {
 		setLatitude(latitude);
 		return this;
 	}
 
-	public Localizacao longitude(Double longitude) {
+	public AdicionarLocalizacaoDTO longitude(Double longitude) {
 		setLongitude(longitude);
 		return this;
-	}
-
-	public Restaurante getRestaurante() {
-		return restaurante;
-	}
-
-	public void setRestaurante(Restaurante restaurante) {
-		this.restaurante = restaurante;
 	}
 
 	@Override
@@ -79,17 +68,16 @@ public class Localizacao extends BaseAudit {
 		if (!super.equals(obj)) {
 			return false;
 		}
-		if (!(obj instanceof Localizacao)) {
+		if (!(obj instanceof AdicionarLocalizacaoDTO)) {
 			return false;
 		}
-		Localizacao other = (Localizacao) obj;
+		AdicionarLocalizacaoDTO other = (AdicionarLocalizacaoDTO) obj;
 		return Objects.equals(latitude, other.latitude) && Objects.equals(longitude, other.longitude);
 	}
 
 	@Override
 	public String toString() {
-		return "Localizacao [latitude=" + latitude + ", longitude=" + longitude + ", getDataCriacao()="
-				+ getDataCriacao() + ", getDataAtualizacao()=" + getDataAtualizacao() + ", getId()=" + getId() + "]";
+		return "LocalizacaoDTO [latitude=" + latitude + ", longitude=" + longitude + ", getDataCriacao()=" + "]";
 	}
 
 }

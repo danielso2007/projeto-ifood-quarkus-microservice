@@ -1,0 +1,22 @@
+PRATO: 
+  - ID: 10
+    DESCRICAO: "Lorem ipsum dolor sit amet, consectetur adipiscing elit."
+    NOME: "Vestibulum at purus"
+    PRECO: 10.99
+    RESTAURANTE_ID: 10
+    DATA_CRIACAO: "2021-01-01"
+    DATA_ATUALIZACAO: "2021-01-01"
+  - ID: 20
+    DESCRICAO: "Mauris euismod neque ut nibh scelerisque mollis. Pellentesque scelerisque, massa tincidunt sollicitudin semper, nibh eros imperdiet est, vitae pharetra mauris lacus quis est."
+    NOME: "Ut tempor ligula"
+    PRECO: 35.00
+    RESTAURANTE_ID: 10
+    DATA_CRIACAO: "2021-01-01"
+    DATA_ATUALIZACAO: "2021-01-01"
+  - ID: 30
+    DESCRICAO: "Massa tincidunt sollicitudin semper, nibh eros imperdiet est, vitae pharetra mauris lacus quis est."
+    NOME: "Curabitur fermentum"
+    PRECO: 999.98
+    RESTAURANTE_ID: 20
+    DATA_CRIACAO: "2021-01-01"
+    DATA_ATUALIZACAO: "2021-01-01"

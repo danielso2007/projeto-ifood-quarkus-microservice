@@ -11,6 +11,7 @@ import javax.validation.constraints.NotNull;
 import org.eclipse.microprofile.openapi.annotations.media.Schema;
 import org.hibernate.validator.constraints.Length;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
@@ -27,6 +28,7 @@ public class PratoDTO extends AuditDTO {
 	@Length(min = 5, max = 500)
 	private String descricao;
 	@Schema(description = "O Restaurante dono do prato", example = "Ver objeto RestauranteDTO", hidden = true)
+	@JsonIgnore
 	private RestauranteDTO restaurante;
 	@Schema(description = "O valor do prato", example = "58.98")
 	@NotNull(message = "O preço não pode ser nulo")

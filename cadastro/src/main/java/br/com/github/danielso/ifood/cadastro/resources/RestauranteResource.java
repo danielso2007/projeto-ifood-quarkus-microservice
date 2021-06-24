@@ -21,15 +21,19 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
 
+import org.eclipse.microprofile.openapi.annotations.enums.SchemaType;
+import org.eclipse.microprofile.openapi.annotations.media.Content;
+import org.eclipse.microprofile.openapi.annotations.media.Schema;
 import org.eclipse.microprofile.openapi.annotations.responses.APIResponse;
 import org.eclipse.microprofile.openapi.annotations.responses.APIResponses;
 import org.eclipse.microprofile.openapi.annotations.tags.Tag;
 
 import br.com.github.danielso.ifood.cadastro.Constants;
-import br.com.github.danielso.ifood.cadastro.converter.RestauranteConverter;
+import br.com.github.danielso.ifood.cadastro.dto.AdicionarRestauranteDTO;
 import br.com.github.danielso.ifood.cadastro.dto.RestauranteDTO;
-import br.com.github.danielso.ifood.cadastro.entities.BaseAudit;
 import br.com.github.danielso.ifood.cadastro.entities.Restaurante;
+import br.com.github.danielso.ifood.cadastro.mapper.IRestauranteMapper;
+import br.com.github.danielso.ifood.cadastro.repositories.LocalizacaoRepository;
 import br.com.github.danielso.ifood.cadastro.repositories.RestauranteRepository;
 import io.quarkus.panache.common.Sort;
 
@@ -45,89 +49,80 @@ public class RestauranteResource {
 	@Inject
 	RestauranteRepository repository;
 	@Inject
-	RestauranteConverter converter;
+	IRestauranteMapper mapper;
+	@Inject
+	LocalizacaoRepository localizacaoRepository;
 
 	public RestauranteResource() {
 		// Construtor padrão.
 	}
-	
+
 	@GET
-	@APIResponses(value = { @APIResponse(responseCode = "200", description = "Registros listados com sucesso"),
-			@APIResponse(responseCode = "400", description = "Erro na obtenção dos dados ou filtro"),
-			@APIResponse(responseCode = "500", description = "Erro interno do servidor") })
+	@APIResponses(value = {
+			@APIResponse(responseCode = "200", description = "Registros listados com sucesso", content = @Content(mediaType = "application/json", schema = @Schema(type = SchemaType.ARRAY, implementation = RestauranteDTO.class))),
+			@APIResponse(responseCode = "400", description = "Erro na obtenção dos dados ou filtro", content = @Content(mediaType = "application/json")),
+			@APIResponse(responseCode = "500", description = "Erro interno do servidor", content = @Content(mediaType = "application/json")) })
 	@Tag(name = TAG, description = TAG_DESCRIPTION)
-	public List<RestauranteDTO> getAll(@QueryParam("sort") @DefaultValue("id") String sortField, @QueryParam("order") @DefaultValue(DEFAULT_ORDER) String order) {
+	public List<RestauranteDTO> getAll(@QueryParam("sort") @DefaultValue("id") String sortField,
+			@QueryParam("order") @DefaultValue(DEFAULT_ORDER) String order) {
 		String[] fields = sortField.contains(",") ? sortField.split(",") : sortField.split(";");
 		var sort = Sort.ascending(fields);
 		if (!order.equals(DEFAULT_ORDER)) {
 			sort = Sort.descending(fields);
 		}
-		return getRepository().listAll(sort).stream().map(entity -> getConverter().entityToDto(entity))
-				.collect(Collectors.toList());
+		return repository.listAll(sort).stream().map(mapper::toRestauranteDTO).collect(Collectors.toList());
 	}
 
 	@POST
-	@APIResponses(value = { @APIResponse(responseCode = "201", description = "Registro criado com sucesso"),
-			@APIResponse(responseCode = "404", description = "Não foi possível cadastrar o registro."),
-			@APIResponse(responseCode = "500", description = "Erro interno do servidor") })
+	@APIResponses(value = {
+			@APIResponse(responseCode = "201", description = "Registro criado com sucesso", content = @Content(mediaType = "application/json", schema = @Schema(type = SchemaType.OBJECT, implementation = RestauranteDTO.class))),
+			@APIResponse(responseCode = "404", description = "Não foi possível cadastrar o registro.", content = @Content(mediaType = "application/json")),
+			@APIResponse(responseCode = "500", description = "Erro interno do servidor", content = @Content(mediaType = "application/json")) })
 	@Tag(name = TAG, description = TAG_DESCRIPTION)
 	@Transactional
-	public Response save(@Valid RestauranteDTO dto) {
-		var entity = getConverter().dtoToEntity(dto);
-		entity.setId(null);
-		if (entity instanceof BaseAudit) {
-			entity.setDataCriacao(null);
-			entity.setDataAtualizacao(null);
-		}
-		getRepository().persist(entity);
-		return Response.status(Status.CREATED).build();
+	public Response save(@Valid AdicionarRestauranteDTO dto) {
+		var entity = mapper.toRestaurante(dto);
+		repository.persist(entity);
+		return Response.status(Status.CREATED).entity(mapper.toRestauranteDTO(entity)).build();
 	}
 
 	@PUT
 	@Path("{id}")
-	@APIResponses(value = { @APIResponse(responseCode = "200", description = "Registro atualizado com sucesso"),
-			@APIResponse(responseCode = "404", description = "Registro não encontrado."),
-			@APIResponse(responseCode = "500", description = "Erro interno do servidor") })
+	@APIResponses(value = {
+			@APIResponse(responseCode = "200", description = "Registro atualizado com sucesso", content = @Content(mediaType = "application/json", schema = @Schema(type = SchemaType.OBJECT, implementation = RestauranteDTO.class))),
+			@APIResponse(responseCode = "404", description = "Registro não encontrado.", content = @Content(mediaType = "application/json")),
+			@APIResponse(responseCode = "500", description = "Erro interno do servidor", content = @Content(mediaType = "application/json")) })
 	@Tag(name = TAG, description = TAG_DESCRIPTION)
 	@Transactional
-	public Response update(@PathParam("id") Long id,@Valid RestauranteDTO dto) {
-		Restaurante entity = getRepository().findByIdOptional(id).orElseThrow(NotFoundException::new);
-		var p = getConverter().dtoToEntity(dto, entity);
-		if (entity instanceof BaseAudit) {
-			p.setDataAtualizacao(null);
-		}
-		getRepository().persist(p);
-		return Response.status(Status.OK).build();
+	public Response update(@PathParam("id") Long id, @Valid AdicionarRestauranteDTO dto) {
+		Restaurante entity = repository.findByIdOptional(id).orElseThrow(NotFoundException::new);
+		mapper.toRestaurante(dto, entity);
+		repository.persist(entity);
+		return Response.ok(mapper.toRestauranteDTO(entity)).build();
 	}
 
 	@GET
 	@Path("{id}")
-	@APIResponses(value = { @APIResponse(responseCode = "200", description = "Registro carregado com sucesso."),
-			@APIResponse(responseCode = "404", description = "Registro não encontrado."),
-			@APIResponse(responseCode = "500", description = "Erro interno do servidor") })
+	@APIResponses(value = {
+			@APIResponse(responseCode = "200", description = "Registro carregado com sucesso.", content = @Content(mediaType = "application/json", schema = @Schema(type = SchemaType.OBJECT, implementation = RestauranteDTO.class))),
+			@APIResponse(responseCode = "404", description = "Registro não encontrado.", content = @Content(mediaType = "application/json")),
+			@APIResponse(responseCode = "500", description = "Erro interno do servidor", content = @Content(mediaType = "application/json")) })
 	@Tag(name = TAG, description = TAG_DESCRIPTION)
 	public RestauranteDTO getById(@PathParam("id") Long id) {
-		return getConverter().entityToDto(getRepository().findByIdOptional(id).orElseThrow(NotFoundException::new));
+		return repository.findByIdOptional(id).map(mapper::toRestauranteDTO)
+				.orElseThrow(NotFoundException::new);
 	}
 
 	@DELETE
 	@Path("{id}")
 	@APIResponses(value = { @APIResponse(responseCode = "200", description = "Registro deletado com sucesso"),
-			@APIResponse(responseCode = "404", description = "Registro não encontrado."),
-			@APIResponse(responseCode = "500", description = "Erro interno do servidor") })
+			@APIResponse(responseCode = "404", description = "Registro não encontrado.", content = @Content(mediaType = "application/json")),
+			@APIResponse(responseCode = "500", description = "Erro interno do servidor", content = @Content(mediaType = "application/json")) })
 	@Tag(name = TAG, description = TAG_DESCRIPTION)
 	@Transactional
 	public Response delete(@PathParam("id") Long id) {
-		getRepository().delete(getRepository().findByIdOptional(id).orElseThrow(NotFoundException::new));
+		repository.delete(repository.findByIdOptional(id).orElseThrow(NotFoundException::new));
 		return Response.status(Status.OK).build();
-	}
-
-	public RestauranteRepository getRepository() {
-		return repository;
-	}
-
-	public RestauranteConverter getConverter() {
-		return converter;
 	}
 
 }

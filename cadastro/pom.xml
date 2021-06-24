@@ -19,6 +19,10 @@
 		<quarkus.platform.group-id>io.quarkus</quarkus.platform.group-id>
 		<quarkus.platform.version>1.13.7.Final</quarkus.platform.version>
 		<surefire-plugin.version>3.0.0-M5</surefire-plugin.version>
+		<org.mapstruct.version>1.4.2.Final</org.mapstruct.version>
+		<com.approvaltests.version>11.7.0</com.approvaltests.version>
+		<com.github.database-rider.version>1.24.0</com.github.database-rider.version>
+		<stax>1.2.0</stax>
 	</properties>
 	<dependencyManagement>
 		<dependencies>
@@ -50,7 +54,7 @@
 		</dependency>
 		<dependency>
 			<groupId>io.quarkus</groupId>
-			<artifactId>quarkus-resteasy-jsonb</artifactId>
+			<artifactId>quarkus-resteasy-jackson</artifactId>
 		</dependency>
 		<dependency>
 			<groupId>io.quarkus</groupId>
@@ -59,6 +63,18 @@
 		<dependency>
 			<groupId>io.quarkus</groupId>
 			<artifactId>quarkus-hibernate-validator</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.mapstruct</groupId>
+			<artifactId>mapstruct</artifactId>
+			<version>${org.mapstruct.version}</version>
+			<scope>provided</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.mapstruct</groupId>
+			<artifactId>mapstruct-processor</artifactId>
+			<version>${org.mapstruct.version}</version>
+			<scope>provided</scope>
 		</dependency>
 		<dependency>
 			<groupId>io.quarkus</groupId>
@@ -78,25 +94,25 @@
 		<dependency>
 			<groupId>com.github.database-rider</groupId>
 			<artifactId>rider-core</artifactId>
-			<version>1.24.0</version>
+			<version>${com.github.database-rider.version}</version>
 			<scope>test</scope>
 		</dependency>
 		<dependency>
 			<groupId>com.github.database-rider</groupId>
 			<artifactId>rider-cdi</artifactId>
-			<version>1.24.0</version>
+			<version>${com.github.database-rider.version}</version>
 			<scope>test</scope>
 		</dependency>
 		<dependency>
 			<groupId>stax</groupId>
 			<artifactId>stax</artifactId>
-			<version>1.2.0</version>
+			<version>${stax}</version>
 			<scope>test</scope>
 		</dependency>
 		<dependency>
 			<groupId>com.approvaltests</groupId>
 			<artifactId>approvaltests</artifactId>
-			<version>11.7.0</version>
+			<version>${com.approvaltests.version}</version>
 			<scope>test</scope>
 		</dependency>
 		<dependency>
@@ -127,6 +143,13 @@
 				<version>${compiler-plugin.version}</version>
 				<configuration>
 					<parameters>${maven.compiler.parameters}</parameters>
+					<annotationProcessorPaths>
+						<path>
+							<groupId>org.mapstruct</groupId>
+							<artifactId>mapstruct-processor</artifactId>
+							<version>${org.mapstruct.version}</version>
+						</path>
+					</annotationProcessorPaths>
 				</configuration>
 			</plugin>
 			<plugin>
@@ -152,6 +175,7 @@
 			<build>
 				<plugins>
 					<plugin>
+						<groupId>org.apache.maven.plugins</groupId>
 						<artifactId>maven-failsafe-plugin</artifactId>
 						<version>${surefire-plugin.version}</version>
 						<executions>
