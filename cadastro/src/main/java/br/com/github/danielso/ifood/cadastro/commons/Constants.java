@@ -1,4 +1,4 @@
-package br.com.github.danielso.ifood.cadastro;
+package br.com.github.danielso.ifood.cadastro.commons;
 
 public final class Constants {
 	

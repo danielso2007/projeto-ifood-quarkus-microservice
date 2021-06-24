@@ -28,7 +28,9 @@ import org.eclipse.microprofile.openapi.annotations.responses.APIResponse;
 import org.eclipse.microprofile.openapi.annotations.responses.APIResponses;
 import org.eclipse.microprofile.openapi.annotations.tags.Tag;
 
-import br.com.github.danielso.ifood.cadastro.Constants;
+import br.com.github.danielso.ifood.cadastro.commons.Constants;
+import br.com.github.danielso.ifood.cadastro.commons.response.ConstraintViolationResponse;
+import br.com.github.danielso.ifood.cadastro.commons.response.ErrorResponse;
 import br.com.github.danielso.ifood.cadastro.dto.AdicionarRestauranteDTO;
 import br.com.github.danielso.ifood.cadastro.dto.RestauranteDTO;
 import br.com.github.danielso.ifood.cadastro.entities.Restaurante;
@@ -60,8 +62,8 @@ public class RestauranteResource {
 	@GET
 	@APIResponses(value = {
 			@APIResponse(responseCode = "200", description = "Registros listados com sucesso", content = @Content(mediaType = "application/json", schema = @Schema(type = SchemaType.ARRAY, implementation = RestauranteDTO.class))),
-			@APIResponse(responseCode = "400", description = "Erro na obtenção dos dados ou filtro", content = @Content(mediaType = "application/json")),
-			@APIResponse(responseCode = "500", description = "Erro interno do servidor", content = @Content(mediaType = "application/json")) })
+			@APIResponse(responseCode = "400", description = "Erro na obtenção dos dados ou filtro", content = @Content(mediaType = "application/json", schema = @Schema(allOf = ConstraintViolationResponse.class))),
+			@APIResponse(responseCode = "500", description = "Erro interno do servidor", content = @Content(mediaType = "application/json", schema = @Schema(allOf = ErrorResponse.class))) })
 	@Tag(name = TAG, description = TAG_DESCRIPTION)
 	public List<RestauranteDTO> getAll(@QueryParam("sort") @DefaultValue("id") String sortField,
 			@QueryParam("order") @DefaultValue(DEFAULT_ORDER) String order) {
@@ -76,8 +78,9 @@ public class RestauranteResource {
 	@POST
 	@APIResponses(value = {
 			@APIResponse(responseCode = "201", description = "Registro criado com sucesso", content = @Content(mediaType = "application/json", schema = @Schema(type = SchemaType.OBJECT, implementation = RestauranteDTO.class))),
+			@APIResponse(responseCode = "400", description = "Erro na obtenção dos dados ou filtro", content = @Content(mediaType = "application/json", schema = @Schema(allOf = ConstraintViolationResponse.class))),
 			@APIResponse(responseCode = "404", description = "Não foi possível cadastrar o registro.", content = @Content(mediaType = "application/json")),
-			@APIResponse(responseCode = "500", description = "Erro interno do servidor", content = @Content(mediaType = "application/json")) })
+			@APIResponse(responseCode = "500", description = "Erro interno do servidor", content = @Content(mediaType = "application/json", schema = @Schema(allOf = ErrorResponse.class))) })
 	@Tag(name = TAG, description = TAG_DESCRIPTION)
 	@Transactional
 	public Response save(@Valid AdicionarRestauranteDTO dto) {
@@ -90,8 +93,9 @@ public class RestauranteResource {
 	@Path("{id}")
 	@APIResponses(value = {
 			@APIResponse(responseCode = "200", description = "Registro atualizado com sucesso", content = @Content(mediaType = "application/json", schema = @Schema(type = SchemaType.OBJECT, implementation = RestauranteDTO.class))),
+			@APIResponse(responseCode = "400", description = "Erro na obtenção dos dados ou filtro", content = @Content(mediaType = "application/json", schema = @Schema(allOf = ConstraintViolationResponse.class))),
 			@APIResponse(responseCode = "404", description = "Registro não encontrado.", content = @Content(mediaType = "application/json")),
-			@APIResponse(responseCode = "500", description = "Erro interno do servidor", content = @Content(mediaType = "application/json")) })
+			@APIResponse(responseCode = "500", description = "Erro interno do servidor", content = @Content(mediaType = "application/json", schema = @Schema(allOf = ErrorResponse.class))) })
 	@Tag(name = TAG, description = TAG_DESCRIPTION)
 	@Transactional
 	public Response update(@PathParam("id") Long id, @Valid AdicionarRestauranteDTO dto) {
@@ -106,18 +110,17 @@ public class RestauranteResource {
 	@APIResponses(value = {
 			@APIResponse(responseCode = "200", description = "Registro carregado com sucesso.", content = @Content(mediaType = "application/json", schema = @Schema(type = SchemaType.OBJECT, implementation = RestauranteDTO.class))),
 			@APIResponse(responseCode = "404", description = "Registro não encontrado.", content = @Content(mediaType = "application/json")),
-			@APIResponse(responseCode = "500", description = "Erro interno do servidor", content = @Content(mediaType = "application/json")) })
+			@APIResponse(responseCode = "500", description = "Erro interno do servidor", content = @Content(mediaType = "application/json", schema = @Schema(allOf = ErrorResponse.class))) })
 	@Tag(name = TAG, description = TAG_DESCRIPTION)
 	public RestauranteDTO getById(@PathParam("id") Long id) {
-		return repository.findByIdOptional(id).map(mapper::toRestauranteDTO)
-				.orElseThrow(NotFoundException::new);
+		return repository.findByIdOptional(id).map(mapper::toRestauranteDTO).orElseThrow(NotFoundException::new);
 	}
 
 	@DELETE
 	@Path("{id}")
 	@APIResponses(value = { @APIResponse(responseCode = "200", description = "Registro deletado com sucesso"),
 			@APIResponse(responseCode = "404", description = "Registro não encontrado.", content = @Content(mediaType = "application/json")),
-			@APIResponse(responseCode = "500", description = "Erro interno do servidor", content = @Content(mediaType = "application/json")) })
+			@APIResponse(responseCode = "500", description = "Erro interno do servidor", content = @Content(mediaType = "application/json", schema = @Schema(allOf = ErrorResponse.class))) })
 	@Tag(name = TAG, description = TAG_DESCRIPTION)
 	@Transactional
 	public Response delete(@PathParam("id") Long id) {
