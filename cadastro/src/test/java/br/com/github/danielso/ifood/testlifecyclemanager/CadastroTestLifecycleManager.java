@@ -14,8 +14,8 @@ public class CadastroTestLifecycleManager implements QuarkusTestResourceLifecycl
 	private static final String PASSWORD = "senha";
 	private static final String DATABASE = "ifood";
 	
-	private static final DockerImageName POSTGRES_IMAGE = DockerImageName.parse("postgres:13.3-alpine"); // 1
-    private GenericContainer<?> postgresContainer = new GenericContainer<>(POSTGRES_IMAGE); //2
+	private static final DockerImageName POSTGRES_IMAGE = DockerImageName.parse("postgres:13.3-alpine");
+    private GenericContainer<?> postgresContainer = new GenericContainer<>(POSTGRES_IMAGE);
 
 
 	@Override
@@ -28,7 +28,11 @@ public class CadastroTestLifecycleManager implements QuarkusTestResourceLifecycl
 		Map<String, String> properties = new HashMap<>();
 		properties.put("quarkus.datasource.username", USER);
 		properties.put("quarkus.datasource.password", PASSWORD);
-		properties.put("quarkus.datasource.jdbc.url", "jdbc:postgresql://" + postgresContainer.getHost() + ":" + postgresContainer.getFirstMappedPort() + "/" + DATABASE);
+		properties.put("quarkus.datasource.jdbc.url", "jdbc:postgresql://" 
+			+ postgresContainer.getHost() 
+			+ ":" 
+			+ postgresContainer.getFirstMappedPort() 
+			+ "/" + DATABASE);
 
 		return properties;
 	}
