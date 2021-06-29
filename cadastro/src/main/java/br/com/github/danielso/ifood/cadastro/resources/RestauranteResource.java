@@ -3,6 +3,7 @@ package br.com.github.danielso.ifood.cadastro.resources;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import javax.annotation.security.RolesAllowed;
 import javax.inject.Inject;
 import javax.transaction.Transactional;
 import javax.validation.Valid;
@@ -22,10 +23,16 @@ import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
 
 import org.eclipse.microprofile.openapi.annotations.enums.SchemaType;
+import org.eclipse.microprofile.openapi.annotations.enums.SecuritySchemeType;
 import org.eclipse.microprofile.openapi.annotations.media.Content;
 import org.eclipse.microprofile.openapi.annotations.media.Schema;
 import org.eclipse.microprofile.openapi.annotations.responses.APIResponse;
 import org.eclipse.microprofile.openapi.annotations.responses.APIResponses;
+import org.eclipse.microprofile.openapi.annotations.security.OAuthFlow;
+import org.eclipse.microprofile.openapi.annotations.security.OAuthFlows;
+import org.eclipse.microprofile.openapi.annotations.security.SecurityRequirement;
+import org.eclipse.microprofile.openapi.annotations.security.SecurityRequirements;
+import org.eclipse.microprofile.openapi.annotations.security.SecurityScheme;
 import org.eclipse.microprofile.openapi.annotations.tags.Tag;
 
 import br.com.github.danielso.ifood.cadastro.commons.Constants;
@@ -38,16 +45,24 @@ import br.com.github.danielso.ifood.cadastro.mapper.IRestauranteMapper;
 import br.com.github.danielso.ifood.cadastro.repositories.LocalizacaoRepository;
 import br.com.github.danielso.ifood.cadastro.repositories.RestauranteRepository;
 import io.quarkus.panache.common.Sort;
+import io.quarkus.security.identity.SecurityIdentity;
 
 @Path(Constants.API_VERSION + Constants.REST_RESTAURANTE)
 @Produces(MediaType.APPLICATION_JSON)
 @Consumes(MediaType.APPLICATION_JSON)
+@RolesAllowed("proprietario")
+@SecurityScheme(securitySchemeName = "ifood-oauth", type = SecuritySchemeType.OAUTH2,
+flows = @OAuthFlows(password = @OAuthFlow(tokenUrl = "http://localhost:8180/auth/realms/ifood/protocol/openid-connect/token")))
+@SecurityRequirements(value = {@SecurityRequirement(name = "ifood-oauth", scopes = {})})
 public class RestauranteResource {
 
 	private static final String TAG = "Restaurantes";
 	private static final String TAG_DESCRIPTION = "Representa os restaurantes";
 	private static final String DEFAULT_ORDER = "asc";
 
+	@Inject
+    SecurityIdentity keycloakSecurityContext;
+	
 	@Inject
 	RestauranteRepository repository;
 	@Inject

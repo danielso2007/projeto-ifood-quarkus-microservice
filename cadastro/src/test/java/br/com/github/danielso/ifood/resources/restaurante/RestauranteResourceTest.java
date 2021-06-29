@@ -1,11 +1,10 @@
 package br.com.github.danielso.ifood.resources.restaurante;
 
-import static io.restassured.RestAssured.given;
-
 import java.util.Map;
 
 import org.approvaltests.Approvals;
 import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import com.github.database.rider.cdi.api.DBRider;
@@ -15,10 +14,13 @@ import com.github.database.rider.core.api.dataset.DataSet;
 
 import br.com.github.danielso.ifood.cadastro.commons.Constants;
 import br.com.github.danielso.ifood.testlifecyclemanager.CadastroTestLifecycleManager;
+import br.com.github.danielso.ifood.utils.TokenUtils;
 import io.quarkus.test.common.QuarkusTestResource;
 import io.quarkus.test.junit.QuarkusTest;
+import io.restassured.RestAssured;
 import io.restassured.http.ContentType;
 import io.restassured.response.Response;
+import io.restassured.specification.RequestSpecification;
 
 @DBRider
 @DBUnit(caseInsensitiveStrategy = Orthography.LOWERCASE)
@@ -54,11 +56,26 @@ class RestauranteResourceTest {
 			+ "  \"localizacao\": {\"latitude\": -12.93138, \"longitude\": -45.46544}\n"
 			+ "}";
 	
+	private String token;
+	
+	@BeforeEach
+	void gerarToken() {
+		try {
+			token = TokenUtils.generateTokenString("/JWTProprietarioClaims.json", null);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+	
+	private RequestSpecification given() {
+		return  RestAssured.given()
+				.headers("Authorization", "Bearer " + token, "Content-Type", ContentType.JSON, "Accept", ContentType.JSON);
+	}
+	
 	@Test
 	@DataSet("restaurantes-cenario-1.yml")
 	void testBuscarRestaurante_com_sucesso() {
 		String resultado = given()
-				.contentType(ContentType.JSON)
 				.when()
 				.get(Constants.API_VERSION + Constants.REST_RESTAURANTE)
 				.then().statusCode(200)
@@ -71,7 +88,6 @@ class RestauranteResourceTest {
 	@DataSet("restaurantes-cenario-1.yml")
 	void testBuscarRestaurante_com_sort_e_order() {
 		String resultado = given()
-				.contentType(ContentType.JSON)
 				.queryParam("sort", "id")
 				.queryParam("order", "asc")
 				.when()
@@ -87,7 +103,6 @@ class RestauranteResourceTest {
 	@DataSet("restaurantes-cenario-1.yml")
 	void testBuscarRestaurante_com_sort_e_order_desc() {
 		String resultado = given()
-				.contentType(ContentType.JSON)
 				.queryParam("sort", "id")
 				.queryParam("order", "desc")
 				.when()
@@ -103,7 +118,6 @@ class RestauranteResourceTest {
 	@DataSet("restaurantes-cenario-1.yml")
 	void testBuscarRestaurante_com_sort_por_nome() {
 		String resultado = given()
-				.contentType(ContentType.JSON)
 				.queryParam("sort", "nome")
 				.queryParam("order", "desc")
 				.when()
@@ -119,7 +133,6 @@ class RestauranteResourceTest {
 	@DataSet()
 	void testCadastroRestaurante() {
 		Response response = given()
-				.header("Content-type", "application/json")
 				.and()
 				.body(requestBody)
 				.when()
@@ -135,7 +148,7 @@ class RestauranteResourceTest {
 	@DataSet()
 	void testCadastroRestaurante_nome_nulo_erro_validacao() {
 		Response response = given()
-				.header("Content-type", "application/json")
+				.contentType(ContentType.JSON)
 				.and()
 				.body(requestBodyNomeNulo)
 				.when()
@@ -158,7 +171,7 @@ class RestauranteResourceTest {
 	@DataSet()
 	void testCadastroRestaurante_cnpj_invalido_erro_validacao() {
 		Response response = given()
-				.header("Content-type", "application/json")
+				.contentType(ContentType.JSON)
 				.and()
 				.body(requestBodyCnpjInvalido)
 				.when()
@@ -179,7 +192,6 @@ class RestauranteResourceTest {
 	@DataSet()
 	void testAtualizarRestaurante() {
 		Response response = given()
-				.header("Content-type", "application/json")
 				.and()
 				.body(requestBodyPut)
 				.when()
@@ -194,7 +206,7 @@ class RestauranteResourceTest {
 	@DataSet()
 	void testAtualizarRestaurante_entidade_nao_existe_error() {
 		Response response = given()
-				.header("Content-type", "application/json")
+				.headers("Authorization", "Bearer " + token, "Content-Type", ContentType.JSON, "Accept", ContentType.JSON)
 				.and()
 				.body(requestBodyPut)
 				.when()
@@ -210,7 +222,6 @@ class RestauranteResourceTest {
 	@DataSet()
 	void testDeletandoRestaurante() {
 		Response response = given()
-				.header("Content-type", "application/json")
 				.and()
 				.body(requestBody)
 				.when()
@@ -219,5 +230,19 @@ class RestauranteResourceTest {
 				.extract()
 				.response();
 		Assertions.assertEquals(200, response.statusCode());
+	}
+	
+	@Test
+	void testBuscarRestaurante_acesso_nao_autorizado() {
+		Response response = RestAssured.given()
+				.queryParam("sort", "id")
+				.queryParam("order", "desc")
+				.when()
+				.get(Constants.API_VERSION + Constants.REST_RESTAURANTE)
+				.then()
+				.statusCode(401)
+				.extract()
+				.response();
+		Assertions.assertEquals(401, response.statusCode());
 	}
 }
