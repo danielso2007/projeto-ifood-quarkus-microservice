@@ -20,8 +20,10 @@ public class CadastroTestLifecycleManager implements QuarkusTestResourceLifecycl
 
 	@Override
 	public Map<String, String> start() {
-		postgresContainer.withEnv("POSTGRES_USER", USER)
-				.withEnv("POSTGRES_PASSWORD", PASSWORD).withExposedPorts(5432)
+		postgresContainer
+		        .withEnv("POSTGRES_USER", USER)
+				.withEnv("POSTGRES_PASSWORD", PASSWORD)
+				.withExposedPorts(5432)
 				.withEnv("POSTGRES_DB", DATABASE);
 		postgresContainer.start();
 
