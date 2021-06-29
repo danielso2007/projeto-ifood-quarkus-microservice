@@ -19,7 +19,6 @@ import io.quarkus.test.common.QuarkusTestResource;
 import io.quarkus.test.junit.QuarkusTest;
 import io.restassured.RestAssured;
 import io.restassured.http.ContentType;
-import io.restassured.http.Header;
 import io.restassured.response.Response;
 import io.restassured.specification.RequestSpecification;
 
@@ -69,7 +68,8 @@ class RestauranteResourceTest {
 	}
 	
 	private RequestSpecification given() {
-		return RestAssured.given().contentType(ContentType.JSON).header(new Header("Authorization ", "Bearer " + token));
+		return  RestAssured.given()
+				.headers("Authorization", "Bearer " + token, "Content-Type", ContentType.JSON, "Accept", ContentType.JSON);
 	}
 	
 	@Test
@@ -133,7 +133,6 @@ class RestauranteResourceTest {
 	@DataSet()
 	void testCadastroRestaurante() {
 		Response response = given()
-				.header("Content-type", "application/json")
 				.and()
 				.body(requestBody)
 				.when()
@@ -149,7 +148,7 @@ class RestauranteResourceTest {
 	@DataSet()
 	void testCadastroRestaurante_nome_nulo_erro_validacao() {
 		Response response = given()
-				.header("Content-type", "application/json")
+				.contentType(ContentType.JSON)
 				.and()
 				.body(requestBodyNomeNulo)
 				.when()
@@ -172,7 +171,7 @@ class RestauranteResourceTest {
 	@DataSet()
 	void testCadastroRestaurante_cnpj_invalido_erro_validacao() {
 		Response response = given()
-				.header("Content-type", "application/json")
+				.contentType(ContentType.JSON)
 				.and()
 				.body(requestBodyCnpjInvalido)
 				.when()
@@ -193,7 +192,6 @@ class RestauranteResourceTest {
 	@DataSet()
 	void testAtualizarRestaurante() {
 		Response response = given()
-				.header("Content-type", "application/json")
 				.and()
 				.body(requestBodyPut)
 				.when()
@@ -208,7 +206,7 @@ class RestauranteResourceTest {
 	@DataSet()
 	void testAtualizarRestaurante_entidade_nao_existe_error() {
 		Response response = given()
-				.header("Content-type", "application/json")
+				.headers("Authorization", "Bearer " + token, "Content-Type", ContentType.JSON, "Accept", ContentType.JSON)
 				.and()
 				.body(requestBodyPut)
 				.when()
@@ -224,7 +222,6 @@ class RestauranteResourceTest {
 	@DataSet()
 	void testDeletandoRestaurante() {
 		Response response = given()
-				.header("Content-type", "application/json")
 				.and()
 				.body(requestBody)
 				.when()
@@ -233,5 +230,19 @@ class RestauranteResourceTest {
 				.extract()
 				.response();
 		Assertions.assertEquals(200, response.statusCode());
+	}
+	
+	@Test
+	void testBuscarRestaurante_acesso_nao_autorizado() {
+		Response response = RestAssured.given()
+				.queryParam("sort", "id")
+				.queryParam("order", "desc")
+				.when()
+				.get(Constants.API_VERSION + Constants.REST_RESTAURANTE)
+				.then()
+				.statusCode(401)
+				.extract()
+				.response();
+		Assertions.assertEquals(401, response.statusCode());
 	}
 }
