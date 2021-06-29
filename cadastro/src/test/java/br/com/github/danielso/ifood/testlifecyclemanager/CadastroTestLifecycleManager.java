@@ -3,31 +3,40 @@ package br.com.github.danielso.ifood.testlifecyclemanager;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.testcontainers.containers.PostgreSQLContainer;
+import org.testcontainers.containers.GenericContainer;
+import org.testcontainers.utility.DockerImageName;
 
 import io.quarkus.test.common.QuarkusTestResourceLifecycleManager;
 
 public class CadastroTestLifecycleManager implements QuarkusTestResourceLifecycleManager {
 
-	public static final PostgreSQLContainer<?> POSTGRES = new PostgreSQLContainer<>("postgres:13.3-alpine");
+	private static final String USER = "usuario";
+	private static final String PASSWORD = "senha";
+	private static final String DATABASE = "ifood";
+	
+	private static final DockerImageName POSTGRES_IMAGE = DockerImageName.parse("postgres:13.3-alpine"); // 1
+    private GenericContainer<?> postgresContainer = new GenericContainer<>(POSTGRES_IMAGE); //2
+
 
 	@Override
 	public Map<String, String> start() {
-		POSTGRES.start();
+		postgresContainer.withEnv("POSTGRES_USER", USER)
+				.withEnv("POSTGRES_PASSWORD", PASSWORD).withExposedPorts(5432)
+				.withEnv("POSTGRES_DB", DATABASE);
+		postgresContainer.start();
 
-		Map<String, String> properties = new HashMap<String, String>();
-
-		properties.put("quarkus.datasource.url", POSTGRES.getJdbcUrl());
-		properties.put("quarkus.datasource.username", "postgres");
-		properties.put("quarkus.datasource.password", "postgres");
+		Map<String, String> properties = new HashMap<>();
+		properties.put("quarkus.datasource.username", USER);
+		properties.put("quarkus.datasource.password", PASSWORD);
+		properties.put("quarkus.datasource.jdbc.url", "jdbc:postgresql://" + postgresContainer.getHost() + ":" + postgresContainer.getFirstMappedPort() + "/" + DATABASE);
 
 		return properties;
 	}
 
 	@Override
 	public void stop() {
-		if (POSTGRES != null && POSTGRES.isRunning()) {
-			POSTGRES.stop();
+		if (postgresContainer != null && postgresContainer.isRunning()) {
+			postgresContainer.stop();
 		}
 	}
 
