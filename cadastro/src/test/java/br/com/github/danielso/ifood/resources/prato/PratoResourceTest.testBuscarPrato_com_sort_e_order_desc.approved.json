@@ -1,25 +1,25 @@
 [
   {
-    "id": 30,
-    "dataAtualizacao": "2021-01-01T00:00:00",
-    "dataCriacao": "2021-01-01T00:00:00",
+    "dataAtualizacao": "2021-01-01T03:00:00",
+    "dataCriacao": "2021-01-01T03:00:00",
     "descricao": "Massa tincidunt sollicitudin semper, nibh eros imperdiet est, vitae pharetra mauris lacus quis est.",
+    "id": 30,
     "nome": "Curabitur fermentum",
     "preco": 999.98
   },
   {
-    "id": 20,
-    "dataAtualizacao": "2021-01-01T00:00:00",
-    "dataCriacao": "2021-01-01T00:00:00",
+    "dataAtualizacao": "2021-01-01T03:00:00",
+    "dataCriacao": "2021-01-01T03:00:00",
     "descricao": "Mauris euismod neque ut nibh scelerisque mollis. Pellentesque scelerisque, massa tincidunt sollicitudin semper, nibh eros imperdiet est, vitae pharetra mauris lacus quis est.",
+    "id": 20,
     "nome": "Ut tempor ligula",
     "preco": 35.00
   },
   {
-    "id": 10,
-    "dataAtualizacao": "2021-01-01T00:00:00",
-    "dataCriacao": "2021-01-01T00:00:00",
+    "dataAtualizacao": "2021-01-01T03:00:00",
+    "dataCriacao": "2021-01-01T03:00:00",
     "descricao": "Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
+    "id": 10,
     "nome": "Vestibulum at purus",
     "preco": 10.99
   }

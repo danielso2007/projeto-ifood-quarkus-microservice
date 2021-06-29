@@ -4,14 +4,16 @@ import java.util.Objects;
 
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Pattern;
 
 import org.eclipse.microprofile.openapi.annotations.media.Schema;
 import org.hibernate.validator.constraints.Length;
+import org.hibernate.validator.constraints.br.CNPJ;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
+@JsonPropertyOrder(alphabetic = true)
 public class RestauranteDTO extends AuditDTO {
 
 	@Schema(description = "O nome do proprietário do Restaurante", example = "Daniel Oliveira")
@@ -22,8 +24,7 @@ public class RestauranteDTO extends AuditDTO {
 	@Schema(description = "CNPJ do Restaurante (sem pontuação)", example = "76115833000160")
 	@NotEmpty(message = "O CNPJ do proprietário não pode ser vazio")
 	@NotNull(message = "O CNPJ do proprietário não pode ser nulo")
-	@Length(min = 14, max = 14, message = "CNPJ deve ter 14 números")
-	@Pattern(regexp = "^[0-9]{14}$", message = "CNPJ inválido")
+	@CNPJ
 	private String cnpj;
 	@Schema(description = "O nome do Restaurante", example = "Outback")
 	@NotEmpty(message = "O nome não pode ser vazio")
