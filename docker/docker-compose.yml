@@ -35,6 +35,31 @@ services:
     networks:
       - netdbpgsql
 
+  keycloak_ifood:
+    image: jboss/keycloak:14.0.0
+    container_name: keycloak_ifood
+    restart: on-failure
+    environment:
+      - KEYCLOAK_USER=admin
+      - KEYCLOAK_PASSWORD=admin
+      - POSTGRES_DB=keycloak
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+      - DB_VENDOR=POSTGRES
+      - DB_ADDR=pgsql-13
+      - DB_PORT=5432
+      - DB_DATABASE=keycloak
+      - DB_USER=postgres
+      - DB_PASSWORD=postgres
+      - KEYCLOAK_LOGLEVEL=INFO
+      - ROOT_LOGLEVEL=INFO
+    ports:
+      - "8180:8080"
+    depends_on:
+      - pgsql
+    networks:
+      - netdbpgsql
+
 volumes:
   pgsqlconf:
   pgsqldata:

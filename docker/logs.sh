@@ -17,4 +17,4 @@ LIGHT_GRAY='\033[0;37m'
 WHITE='\033[1;37m'
 NC='\033[0m' # No Color
 echo -e "${YELLOW}Show logs: $1${NC}"
-docker logs -f keycloak_ifood
+docker logs -f pgsql-13
