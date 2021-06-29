@@ -6,8 +6,10 @@ import java.util.Objects;
 import org.eclipse.microprofile.openapi.annotations.media.Schema;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
+@JsonPropertyOrder(alphabetic = true)
 public abstract class AuditDTO extends BaseDTO {
 
 	

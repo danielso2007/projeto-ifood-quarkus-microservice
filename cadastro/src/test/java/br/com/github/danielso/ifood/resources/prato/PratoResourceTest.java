@@ -130,14 +130,12 @@ class PratoResourceTest {
 				.statusCode(400)
 				.extract()
 				.response();
+        
+        Map<String, String> parameterViolations = response.jsonPath().getMap("errors[0]");
+		
 		Assertions.assertEquals(400, response.statusCode());
-		
-		Map<String, String> parameterViolations = response.jsonPath().getMap("parameterViolations[0]");
-		System.out.println(response.jsonPath().getMap("parameterViolations[0]"));
-		
-		Assertions.assertEquals("PARAMETER", parameterViolations.get("constraintType"));
-		Assertions.assertTrue(parameterViolations.get("message").contains("O nome não pode ser "));
-        Assertions.assertEquals("save.dto.nome", parameterViolations.get("path"));
+		Assertions.assertEquals("nome", parameterViolations.get("atributo"));
+		Assertions.assertTrue(parameterViolations.get("mensagem").contains("O nome não pode ser "));
 	}
 
 	@Test
@@ -153,13 +151,12 @@ class PratoResourceTest {
 				.statusCode(400)
 				.extract()
 				.response();
-		Assertions.assertEquals(400, response.statusCode());
-		Map<String, String> parameterViolations = response.jsonPath().getMap("parameterViolations[0]");
-		System.out.println(response.jsonPath().getMap("parameterViolations[0]"));
 		
-		Assertions.assertEquals("PARAMETER", parameterViolations.get("constraintType"));
-		Assertions.assertEquals("O preço não pode ser nulo", parameterViolations.get("message"));
-        Assertions.assertEquals("save.dto.preco", parameterViolations.get("path"));
+		Map<String, String> parameterViolations = response.jsonPath().getMap("errors[0]");
+		
+		Assertions.assertEquals(400, response.statusCode());
+		Assertions.assertEquals("preco", parameterViolations.get("atributo"));
+		Assertions.assertEquals("O preço não pode ser nulo", parameterViolations.get("mensagem"));
 	}
 	
 	@Test

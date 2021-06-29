@@ -29,25 +29,29 @@ class RestauranteResourceTest {
 	private static String requestBody = "{\n"
 			+ "  \"cnpj\": \"76115833000160\",\n"
 			+ "  \"nome\": \"Outback\",\n"
-			+ "  \"proprietario\": \"Daniel Oliveira\"\n"
+			+ "  \"proprietario\": \"Daniel Oliveira\",\n"
+			+ "  \"localizacao\": {\"latitude\": -12.93138, \"longitude\": -45.46544}\n"
 			+ "}";
 	
 	private static String requestBodyPut = "{\n"
 			+ "  \"cnpj\": \"76115833000160\",\n"
 			+ "  \"nome\": \"Outback 2\",\n"
-			+ "  \"proprietario\": \"Daniel da Silva\"\n"
+			+ "  \"proprietario\": \"Daniel da Silva\",\n"
+			+ "  \"localizacao\": {\"latitude\": -12.93138, \"longitude\": -45.46544}\n"
 			+ "}";
 	
 	private static String requestBodyNomeNulo = "{\n"
 			+ "  \"cnpj\": \"76115833000160\",\n"
 			+ "  \"nome\": null,\n"
-			+ "  \"proprietario\": \"Daniel Oliveira\"\n"
+			+ "  \"proprietario\": \"Daniel Oliveira\",\n"
+			+ "  \"localizacao\": {\"latitude\": -12.93138, \"longitude\": -45.46544}\n"
 			+ "}";
 	
 	private static String requestBodyCnpjInvalido = "{\n"
 			+ "  \"cnpj\": \"125478569ed654\",\n"
 			+ "  \"nome\": \"Flávio\",\n"
-			+ "  \"proprietario\": \"Daniel Oliveira\"\n"
+			+ "  \"proprietario\": \"Daniel Oliveira\",\n"
+			+ "  \"localizacao\": {\"latitude\": -12.93138, \"longitude\": -45.46544}\n"
 			+ "}";
 	
 	@Test
@@ -140,13 +144,13 @@ class RestauranteResourceTest {
 				.statusCode(400)
 				.extract()
 				.response();
+		
+		Map<String, String> parameterViolations = response.jsonPath().getMap("errors[0]");
+		
 		Assertions.assertEquals(400, response.statusCode());
+		Assertions.assertEquals("nome", parameterViolations.get("atributo"));
+		Assertions.assertTrue(parameterViolations.get("mensagem").contains("O nome não pode ser "));
 		
-		Map<String, String> parameterViolations = response.jsonPath().getMap("parameterViolations[0]");
-		
-		Assertions.assertEquals("PARAMETER", parameterViolations.get("constraintType"));
-        Assertions.assertTrue(parameterViolations.get("message").contains("O nome não pode ser "));
-        Assertions.assertEquals("save.dto.nome", parameterViolations.get("path"));
 	}
 	
 
@@ -163,13 +167,12 @@ class RestauranteResourceTest {
 				.statusCode(400)
 				.extract()
 				.response();
+		
+		Map<String, String> parameterViolations = response.jsonPath().getMap("errors[0]");
+		
 		Assertions.assertEquals(400, response.statusCode());
-		
-		Map<String, String> parameterViolations = response.jsonPath().getMap("parameterViolations[0]");
-		
-		Assertions.assertEquals("PARAMETER", parameterViolations.get("constraintType"));
-        Assertions.assertEquals("CNPJ inválido", parameterViolations.get("message"));
-        Assertions.assertEquals("save.dto.cnpj", parameterViolations.get("path"));
+		Assertions.assertEquals("cnpj", parameterViolations.get("atributo"));
+		Assertions.assertEquals("número do registro de contribuinte corporativo brasileiro (CNPJ) inválido", parameterViolations.get("mensagem"));
 	}
 	
 	@Test
