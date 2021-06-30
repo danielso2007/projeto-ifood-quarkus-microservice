@@ -16,6 +16,5 @@ LIGHT_CYAN='\033[1;36m'
 LIGHT_GRAY='\033[0;37m'
 WHITE='\033[1;37m'
 NC='\033[0m' # No Color
-echo -e "${YELLOW}Iniciando container...${NC}"
-docker-compose up -d
-docker-compose ps
+echo -e "${YELLOW}Show logs: $1${NC}"
+docker logs -f keycloak_ifood
