@@ -28,6 +28,7 @@ import org.eclipse.microprofile.openapi.annotations.media.Schema;
 import org.eclipse.microprofile.openapi.annotations.responses.APIResponse;
 import org.eclipse.microprofile.openapi.annotations.responses.APIResponses;
 import org.eclipse.microprofile.openapi.annotations.tags.Tag;
+import org.eclipse.microprofile.opentracing.Traced;
 
 import br.com.github.danielso.ifood.cadastro.commons.Constants;
 import br.com.github.danielso.ifood.cadastro.commons.response.ConstraintViolationResponse;
@@ -41,6 +42,7 @@ import br.com.github.danielso.ifood.cadastro.repositories.PratoRepository;
 import br.com.github.danielso.ifood.cadastro.repositories.RestauranteRepository;
 import io.quarkus.panache.common.Sort;
 
+@Traced
 @Path(Constants.API_VERSION + Constants.REST_RESTAURANTE)
 @Produces(MediaType.APPLICATION_JSON)
 @Consumes(MediaType.APPLICATION_JSON)

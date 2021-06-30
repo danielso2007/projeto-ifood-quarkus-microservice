@@ -93,7 +93,7 @@ REST is easy peasy with this Hello World RESTEasy resource.
 
 1. Acessar a url http://localhost:8180/auth/realms/ifood
 2. Pegar `public_key`
-3. No `application.properties` do projeto, adicionar a chave no campo `mp.jwt.verify.publickey`
+3. No `application.properties` do projeto, adicionar a chave no campo ``
 
 # Acessos
 

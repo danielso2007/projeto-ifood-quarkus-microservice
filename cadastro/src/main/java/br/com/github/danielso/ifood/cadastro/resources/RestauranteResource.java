@@ -34,6 +34,7 @@ import org.eclipse.microprofile.openapi.annotations.security.SecurityRequirement
 import org.eclipse.microprofile.openapi.annotations.security.SecurityRequirements;
 import org.eclipse.microprofile.openapi.annotations.security.SecurityScheme;
 import org.eclipse.microprofile.openapi.annotations.tags.Tag;
+import org.eclipse.microprofile.opentracing.Traced;
 
 import br.com.github.danielso.ifood.cadastro.commons.Constants;
 import br.com.github.danielso.ifood.cadastro.commons.response.ConstraintViolationResponse;
@@ -47,6 +48,7 @@ import br.com.github.danielso.ifood.cadastro.repositories.RestauranteRepository;
 import io.quarkus.panache.common.Sort;
 import io.quarkus.security.identity.SecurityIdentity;
 
+@Traced
 @Path(Constants.API_VERSION + Constants.REST_RESTAURANTE)
 @Produces(MediaType.APPLICATION_JSON)
 @Consumes(MediaType.APPLICATION_JSON)
