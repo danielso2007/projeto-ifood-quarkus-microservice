@@ -78,7 +78,7 @@ public class PratosResource {
 		if (!order.equals(DEFAULT_ORDER)) {
 			sort = Sort.descending(fields);
 		}
-		return repository.listAll(sort).stream().map(mapper::toPratoDTO).collect(Collectors.toList());
+		return repository.findByRestaurante(idRestaurante, sort).stream().map(mapper::toPratoDTO).collect(Collectors.toList());
 	}
 
 	@POST

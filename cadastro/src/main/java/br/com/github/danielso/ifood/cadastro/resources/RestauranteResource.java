@@ -87,7 +87,7 @@ public class RestauranteResource {
 	@Tag(name = TAG, description = TAG_DESCRIPTION)
 	@Counted(displayName = "Quantidade buscas de restaurante", name = "qtd_busca_restaurante", description = "Quantidades de buscas de restaurantes", absolute = true)
 	@SimplyTimed(displayName = "Tempo buscas de restaurante", name = "tempo_simples_busca", absolute = true)
-	@Timed(displayName = "Tempo completo buscas de restaurante", name = "tempo_completo_de_busca", absolute = true)
+	@Timed(displayName = "Tempo completo buscas de restaurante", name = "tempo_completo_de_busca")
 	public List<RestauranteDTO> getAll(@QueryParam("sort") @DefaultValue("id") String sortField,
 			@QueryParam("order") @DefaultValue(DEFAULT_ORDER) String order) {
 		String[] fields = sortField.contains(",") ? sortField.split(",") : sortField.split(";");
