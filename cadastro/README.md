@@ -101,3 +101,4 @@ Jaeger: http://localhost:16686/search
 pgAdmin: http://localhost:5050
 KeyCloak: http://localhost:8180/auth/
 Prometheus: http://localhost:9090/
+Grafana: http://localhost:3000/login
