@@ -1,0 +1,1 @@
+docker build -f Dockerfile.prometheus -t prometheus-ifood .

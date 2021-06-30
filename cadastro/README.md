@@ -100,3 +100,4 @@ REST is easy peasy with this Hello World RESTEasy resource.
 Jaeger: http://localhost:16686/search
 pgAdmin: http://localhost:5050
 KeyCloak: http://localhost:8180/auth/
+Prometheus: http://localhost:9090/

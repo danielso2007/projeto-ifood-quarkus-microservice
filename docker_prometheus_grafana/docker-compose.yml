@@ -1,0 +1,25 @@
+version: "3.9"
+services:
+  prometheus_ifood:
+    image: prometheus-ifood
+    container_name: prometheus_ifood
+    network_mode: host
+    ports:
+      - "9090:9090"
+  grafana_ifood:
+    image: grafana/grafana:8.0.3
+    container_name: grafana_ifood
+    network_mode: host
+    user: "104"
+    ports:
+      - "3000:3000"
+    volumes:
+      - grafana-storage:/var/lib/grafana
+
+networks:
+  default:
+    external: true
+    name: net-ifood
+
+volumes:
+  grafana-storage:
