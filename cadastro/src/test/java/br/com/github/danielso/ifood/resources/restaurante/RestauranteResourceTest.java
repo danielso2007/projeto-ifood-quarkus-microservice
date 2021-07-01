@@ -7,10 +7,11 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import com.github.database.rider.cdi.api.DBRider;
-import com.github.database.rider.core.api.configuration.DBUnit;
-import com.github.database.rider.core.api.configuration.Orthography;
-import com.github.database.rider.core.api.dataset.DataSet;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.JsonMappingException;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.node.ObjectNode;
 
 import br.com.github.danielso.ifood.cadastro.commons.Constants;
 import br.com.github.danielso.ifood.testlifecyclemanager.CadastroTestLifecycleManager;
@@ -22,8 +23,6 @@ import io.restassured.http.ContentType;
 import io.restassured.response.Response;
 import io.restassured.specification.RequestSpecification;
 
-@DBRider
-@DBUnit(caseInsensitiveStrategy = Orthography.LOWERCASE)
 @QuarkusTest
 @QuarkusTestResource(CadastroTestLifecycleManager.class)
 class RestauranteResourceTest {
@@ -73,20 +72,18 @@ class RestauranteResourceTest {
 	}
 	
 	@Test
-	@DataSet("restaurantes-cenario-1.yml")
-	void testBuscarRestaurante_com_sucesso() {
+	void testBuscarRestaurante_com_sucesso() throws JsonMappingException, JsonProcessingException {
 		String resultado = given()
 				.when()
 				.get(Constants.API_VERSION + Constants.REST_RESTAURANTE)
 				.then().statusCode(200)
 				.extract()
 				.asString();
-		Approvals.verifyJson(resultado);
+		Approvals.verifyJson(ajustarDataParaZeroHorasEhMinutos(resultado));
 	}
 
 	@Test
-	@DataSet("restaurantes-cenario-1.yml")
-	void testBuscarRestaurante_com_sort_e_order() {
+	void testBuscarRestaurante_com_sort_e_order() throws JsonMappingException, JsonProcessingException {
 		String resultado = given()
 				.queryParam("sort", "id")
 				.queryParam("order", "asc")
@@ -96,12 +93,11 @@ class RestauranteResourceTest {
 				.statusCode(200)
 				.extract()
 				.asString();
-		Approvals.verifyJson(resultado);
+		Approvals.verifyJson(ajustarDataParaZeroHorasEhMinutos(resultado));
 	}
 	
 	@Test
-	@DataSet("restaurantes-cenario-1.yml")
-	void testBuscarRestaurante_com_sort_e_order_desc() {
+	void testBuscarRestaurante_com_sort_e_order_desc() throws JsonMappingException, JsonProcessingException {
 		String resultado = given()
 				.queryParam("sort", "id")
 				.queryParam("order", "desc")
@@ -111,12 +107,12 @@ class RestauranteResourceTest {
 				.statusCode(200)
 				.extract()
 				.asString();
-		Approvals.verifyJson(resultado);
+		
+		Approvals.verifyJson(ajustarDataParaZeroHorasEhMinutos(resultado));
 	}
 	
 	@Test
-	@DataSet("restaurantes-cenario-1.yml")
-	void testBuscarRestaurante_com_sort_por_nome() {
+	void testBuscarRestaurante_com_sort_por_nome() throws JsonMappingException, JsonProcessingException {
 		String resultado = given()
 				.queryParam("sort", "nome")
 				.queryParam("order", "desc")
@@ -126,11 +122,10 @@ class RestauranteResourceTest {
 				.statusCode(200)
 				.extract()
 				.asString();
-		Approvals.verifyJson(resultado);
+		 Approvals.verifyJson(ajustarDataParaZeroHorasEhMinutos(resultado));
 	}
-
+	
 	@Test
-	@DataSet()
 	void testCadastroRestaurante() {
 		Response response = given()
 				.and()
@@ -145,7 +140,6 @@ class RestauranteResourceTest {
 	}
 	
 	@Test
-	@DataSet()
 	void testCadastroRestaurante_nome_nulo_erro_validacao() {
 		Response response = given()
 				.contentType(ContentType.JSON)
@@ -163,12 +157,10 @@ class RestauranteResourceTest {
 		Assertions.assertEquals(400, response.statusCode());
 		Assertions.assertEquals("nome", parameterViolations.get("atributo"));
 		Assertions.assertTrue(parameterViolations.get("mensagem").contains("O nome não pode ser "));
-		
 	}
 	
 
 	@Test
-	@DataSet()
 	void testCadastroRestaurante_cnpj_invalido_erro_validacao() {
 		Response response = given()
 				.contentType(ContentType.JSON)
@@ -189,13 +181,12 @@ class RestauranteResourceTest {
 	}
 	
 	@Test
-	@DataSet()
 	void testAtualizarRestaurante() {
 		Response response = given()
 				.and()
 				.body(requestBodyPut)
 				.when()
-				.put(Constants.API_VERSION + Constants.REST_RESTAURANTE + "/10")
+				.put(Constants.API_VERSION + Constants.REST_RESTAURANTE + "/1")
 				.then()
 				.extract()
 				.response();
@@ -203,7 +194,6 @@ class RestauranteResourceTest {
 	}
 	
 	@Test
-	@DataSet()
 	void testAtualizarRestaurante_entidade_nao_existe_error() {
 		Response response = given()
 				.headers("Authorization", "Bearer " + token, "Content-Type", ContentType.JSON, "Accept", ContentType.JSON)
@@ -219,13 +209,12 @@ class RestauranteResourceTest {
 	}
 	
 	@Test
-	@DataSet()
 	void testDeletandoRestaurante() {
 		Response response = given()
 				.and()
 				.body(requestBody)
 				.when()
-				.delete(Constants.API_VERSION + Constants.REST_RESTAURANTE + "/10")
+				.delete(Constants.API_VERSION + Constants.REST_RESTAURANTE + "/2")
 				.then()
 				.extract()
 				.response();
@@ -244,5 +233,20 @@ class RestauranteResourceTest {
 				.extract()
 				.response();
 		Assertions.assertEquals(401, response.statusCode());
+	}
+	
+	private String ajustarDataParaZeroHorasEhMinutos(String resultado) throws JsonMappingException, JsonProcessingException {
+		ObjectMapper mapper = new ObjectMapper();
+		JsonNode rootNode = mapper.readTree(resultado);
+		if (rootNode.isArray()) {
+			for (final JsonNode objNode : rootNode) {
+		        ((ObjectNode)objNode).put("dataCriacao", "2021-01-01T03:00:00");
+		        ((ObjectNode)objNode).put("dataAtualizacao", "2021-01-01T03:00:00");
+		        JsonNode objNodeLocalizacao = objNode.get("localizacao");
+		        ((ObjectNode)objNodeLocalizacao).put("dataCriacao", "2021-01-01T03:00:00");
+		        ((ObjectNode)objNodeLocalizacao).put("dataAtualizacao", "2021-01-01T03:00:00");
+		    }
+		}
+		return rootNode.toString();
 	}
 }

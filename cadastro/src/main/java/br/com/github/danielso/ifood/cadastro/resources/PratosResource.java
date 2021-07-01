@@ -28,6 +28,7 @@ import org.eclipse.microprofile.openapi.annotations.media.Schema;
 import org.eclipse.microprofile.openapi.annotations.responses.APIResponse;
 import org.eclipse.microprofile.openapi.annotations.responses.APIResponses;
 import org.eclipse.microprofile.openapi.annotations.tags.Tag;
+import org.eclipse.microprofile.opentracing.Traced;
 
 import br.com.github.danielso.ifood.cadastro.commons.Constants;
 import br.com.github.danielso.ifood.cadastro.commons.response.ConstraintViolationResponse;
@@ -41,6 +42,7 @@ import br.com.github.danielso.ifood.cadastro.repositories.PratoRepository;
 import br.com.github.danielso.ifood.cadastro.repositories.RestauranteRepository;
 import io.quarkus.panache.common.Sort;
 
+@Traced
 @Path(Constants.API_VERSION + Constants.REST_RESTAURANTE)
 @Produces(MediaType.APPLICATION_JSON)
 @Consumes(MediaType.APPLICATION_JSON)
@@ -76,7 +78,7 @@ public class PratosResource {
 		if (!order.equals(DEFAULT_ORDER)) {
 			sort = Sort.descending(fields);
 		}
-		return repository.listAll(sort).stream().map(mapper::toPratoDTO).collect(Collectors.toList());
+		return repository.findByRestaurante(idRestaurante, sort).stream().map(mapper::toPratoDTO).collect(Collectors.toList());
 	}
 
 	@POST
@@ -106,7 +108,7 @@ public class PratosResource {
 	@Transactional
 	public Response update(@PathParam("idRestaurante") Long idRestaurante, @PathParam("id") Long id,
 			@Valid AdicionarPratoDTO dto) {
-		Prato entity = repository.findByIdOptional(id).orElseThrow(NotFoundException::new);
+		Prato entity = repository.findByIdAndRestauranteId(id, idRestaurante).orElseThrow(NotFoundException::new);
 		mapper.toPrato(dto, entity);
 		repository.persist(entity);
 		return Response.ok(mapper.toPratoDTO(entity)).build();
@@ -120,7 +122,7 @@ public class PratosResource {
 			@APIResponse(responseCode = "500", description = "Erro interno do servidor", content = @Content(mediaType = "application/json", schema = @Schema(allOf = ErrorResponse.class))) })
 	@Tag(name = TAG, description = TAG_DESCRIPTION)
 	public PratoDTO getById(@PathParam("idRestaurante") Long idRestaurante, @PathParam("id") Long id) {
-		return repository.findByIdOptional(id).map(mapper::toPratoDTO).orElseThrow(NotFoundException::new);
+		return repository.findByIdAndRestauranteId(id, idRestaurante).map(mapper::toPratoDTO).orElseThrow(NotFoundException::new);
 	}
 
 	@DELETE
@@ -131,8 +133,7 @@ public class PratosResource {
 	@Tag(name = TAG, description = TAG_DESCRIPTION)
 	@Transactional
 	public Response delete(@PathParam("idRestaurante") Long idRestaurante, @PathParam("id") Long id) {
-		findRestaurante(idRestaurante);
-		repository.delete(repository.findByIdOptional(id).orElseThrow(NotFoundException::new));
+		repository.delete(repository.findByIdAndRestauranteId(id, idRestaurante).orElseThrow(NotFoundException::new));
 		return Response.status(Status.OK).build();
 	}
 

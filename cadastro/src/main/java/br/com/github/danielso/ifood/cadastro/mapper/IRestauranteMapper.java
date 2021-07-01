@@ -1,5 +1,6 @@
 package br.com.github.danielso.ifood.cadastro.mapper;
 
+import org.eclipse.microprofile.opentracing.Traced;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.MappingTarget;
@@ -9,6 +10,7 @@ import br.com.github.danielso.ifood.cadastro.dto.AdicionarRestauranteDTO;
 import br.com.github.danielso.ifood.cadastro.dto.RestauranteDTO;
 import br.com.github.danielso.ifood.cadastro.entities.Restaurante;
 
+@Traced
 @Mapper(componentModel = "cdi")
 public interface IRestauranteMapper {
 

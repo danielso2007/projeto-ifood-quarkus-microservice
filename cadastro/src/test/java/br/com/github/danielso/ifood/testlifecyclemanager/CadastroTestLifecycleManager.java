@@ -17,7 +17,6 @@ public class CadastroTestLifecycleManager implements QuarkusTestResourceLifecycl
 	private static final DockerImageName POSTGRES_IMAGE = DockerImageName.parse("postgres:13.3-alpine");
     private GenericContainer<?> postgresContainer = new GenericContainer<>(POSTGRES_IMAGE);
 
-
 	@Override
 	public Map<String, String> start() {
 		postgresContainer
@@ -30,7 +29,7 @@ public class CadastroTestLifecycleManager implements QuarkusTestResourceLifecycl
 		Map<String, String> properties = new HashMap<>();
 		properties.put("quarkus.datasource.username", USER);
 		properties.put("quarkus.datasource.password", PASSWORD);
-		properties.put("quarkus.datasource.jdbc.url", "jdbc:postgresql://" 
+		properties.put("quarkus.datasource.jdbc.url", "jdbc:tracing:postgresql://" 
 			+ postgresContainer.getHost() 
 			+ ":" 
 			+ postgresContainer.getFirstMappedPort() 

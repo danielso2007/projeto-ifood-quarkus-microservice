@@ -1,18 +1,47 @@
 [
   {
-    "cnpj": "68454478000125",
+    "cnpj": "02379021000195",
     "dataAtualizacao": "2021-01-01T03:00:00",
     "dataCriacao": "2021-01-01T03:00:00",
-    "id": 20,
-    "nome": "Olympe",
-    "proprietario": "Hugo Ricardo Carlos Pinto"
+    "id": 3,
+    "localizacao": {
+      "dataAtualizacao": "2021-01-01T03:00:00",
+      "dataCriacao": "2021-01-01T03:00:00",
+      "id": 3,
+      "latitude": -22.9032784,
+      "longitude": -43.1033432
+    },
+    "nome": "Nulla imperdiet neque",
+    "proprietario": "Luan Guilherme da Costa"
   },
   {
-    "cnpj": "68454478000125",
+    "cnpj": "58394438000181",
     "dataAtualizacao": "2021-01-01T03:00:00",
     "dataCriacao": "2021-01-01T03:00:00",
-    "id": 10,
-    "nome": "A Casa do Porco",
-    "proprietario": "Betina Laura Jéssica Almada"
+    "id": 2,
+    "localizacao": {
+      "dataAtualizacao": "2021-01-01T03:00:00",
+      "dataCriacao": "2021-01-01T03:00:00",
+      "id": 2,
+      "latitude": -22.9014599,
+      "longitude": -43.1068623
+    },
+    "nome": "Ut ac lacus suscipit nisl eleifend",
+    "proprietario": "Emily Clarice Ferreira"
+  },
+  {
+    "cnpj": "96765226000152",
+    "dataAtualizacao": "2021-01-01T03:00:00",
+    "dataCriacao": "2021-01-01T03:00:00",
+    "id": 1,
+    "localizacao": {
+      "dataAtualizacao": "2021-01-01T03:00:00",
+      "dataCriacao": "2021-01-01T03:00:00",
+      "id": 1,
+      "latitude": -22.9014599,
+      "longitude": -43.1068623
+    },
+    "nome": "Lorem ipsum dolor sit amet",
+    "proprietario": "Sophia Vera Lima"
   }
 ]
