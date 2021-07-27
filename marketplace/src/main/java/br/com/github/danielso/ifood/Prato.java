@@ -3,11 +3,18 @@ package br.com.github.danielso.ifood;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.Objects;
+import java.util.stream.StreamSupport;
 
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
+
+import io.smallrye.mutiny.Multi;
+import io.vertx.mutiny.pgclient.PgPool;
+import io.vertx.mutiny.sqlclient.PreparedQuery;
+import io.vertx.mutiny.sqlclient.Row;
+import io.vertx.mutiny.sqlclient.RowSet;
 
 public class Prato {
 
@@ -160,6 +167,12 @@ public class Prato {
 		return "Prato [nome=" + nome + ", descricao=" + descricao + ", restaurante=" + restaurante + ", preco=" + preco
 				+ ", getDataCriacao()=" + getDataCriacao() + ", getDataAtualizacao()=" + getDataAtualizacao()
 				+ ", getId()=" + getId() + "]";
+	}
+
+	public static Multi<PratoDTO> findAll(PgPool pgPool) {
+		PreparedQuery<RowSet<Row>> preparedQuery = pgPool.preparedQuery("select * from prato_cliente");
+		return preparedQuery.execute().onItem().transformToMulti(rowSet -> Multi.createFrom()
+				.items(() -> StreamSupport.stream(rowSet.spliterator(), false))).onItem().transform(PratoDTO::from);
 	}
 
 }
