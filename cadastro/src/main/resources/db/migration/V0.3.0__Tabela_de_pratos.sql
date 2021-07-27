@@ -28,7 +28,7 @@ CREATE TABLE IF NOT EXISTS public.prato
 TABLESPACE pg_default;
 
 ALTER TABLE public.prato
-    OWNER to postgres;
+    OWNER to ifood_cadastro;
 -- Index: indexpratosnome
 
 -- DROP INDEX public.indexpratosnome;

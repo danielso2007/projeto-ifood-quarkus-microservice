@@ -7,7 +7,7 @@ CREATE SEQUENCE public.localizacao_id_seq
     MAXVALUE 99999999999;
 
 ALTER SEQUENCE public.localizacao_id_seq
-    OWNER TO postgres;
+    OWNER TO ifood_cadastro;
 
 -- DROP TABLE public.localizacao;
 
@@ -24,4 +24,4 @@ CREATE TABLE IF NOT EXISTS public.localizacao
 TABLESPACE pg_default;
 
 ALTER TABLE public.localizacao
-    OWNER to postgres;
+    OWNER to ifood_cadastro;

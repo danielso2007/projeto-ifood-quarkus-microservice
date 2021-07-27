@@ -8,7 +8,7 @@ CREATE SEQUENCE public.restaurante_id_seq
     MAXVALUE 99999999999;
 
 ALTER SEQUENCE public.localizacao_id_seq
-    OWNER TO postgres;
+    OWNER TO ifood_cadastro;
 -- DROP TABLE public.restaurante;
 
 CREATE TABLE IF NOT EXISTS public.restaurante
@@ -31,7 +31,7 @@ CREATE TABLE IF NOT EXISTS public.restaurante
 TABLESPACE pg_default;
 
 ALTER TABLE public.restaurante
-    OWNER to postgres;
+    OWNER to ifood_cadastro;
 -- Index: indexrestaurantenome
 
 -- DROP INDEX public.indexrestaurantenome;
