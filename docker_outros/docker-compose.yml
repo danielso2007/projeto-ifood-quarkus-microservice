@@ -7,14 +7,14 @@ services:
       - KEYCLOAK_USER=admin
       - KEYCLOAK_PASSWORD=admin
       - POSTGRES_DB=keycloak
-      - POSTGRES_USER=postgres
-      - POSTGRES_PASSWORD=postgres
+      - POSTGRES_USER=keycloak
+      - POSTGRES_PASSWORD=1q2w3e
       - DB_VENDOR=POSTGRES
-      - DB_ADDR=pgsql
+      - DB_ADDR=pgsql-keycloak
       - DB_PORT=5432
       - DB_DATABASE=keycloak
-      - DB_USER=postgres
-      - DB_PASSWORD=postgres
+      - DB_USER=keycloak
+      - DB_PASSWORD=1q2w3e
       - KEYCLOAK_LOGLEVEL=INFO
       - ROOT_LOGLEVEL=INFO
     ports:

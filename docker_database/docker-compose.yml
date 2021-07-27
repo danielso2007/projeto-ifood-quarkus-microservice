@@ -26,6 +26,19 @@ services:
       - "pgsqlconfMarketplace:/etc/postgresql"
       - "pgsqldataMarketplace:/var/lib/postgresql/data"
       - "pgsqldblogsMarketplace:/var/log"
+  pgsql-keycloak:
+    image: postgres:13.3-alpine
+    container_name: pgsql-keycloak
+    restart: on-failure
+    environment:
+      - POSTGRES_USER=keycloak
+      - POSTGRES_PASSWORD=1q2w3e
+    ports:
+      - "5434:5432"
+    volumes:
+      - "pgsqlconfKeycloak:/etc/postgresql"
+      - "pgsqldataKeycloak:/var/lib/postgresql/data"
+      - "pgsqldblogsKeycloak:/var/log"
   pgadmin4:
     image: dpage/pgadmin4:latest
     container_name: pgadmin-4
@@ -42,6 +55,7 @@ services:
     depends_on:
       - pgsql-cadastro
       - pgsql-marketplace
+      - pgsql-keycloak
 
 volumes:
   pgsqlconfMarketplace:
@@ -50,6 +64,9 @@ volumes:
   pgsqlconfCadastro:
   pgsqldataCadastro:
   pgsqldblogsCadastro:
+  pgsqlconfKeycloak:
+  pgsqldataKeycloak:
+  pgsqldblogsKeycloak:
   pgadmin4sessiondata:
   pgadmin4conf:
   pgadmin4serverdefinitions:

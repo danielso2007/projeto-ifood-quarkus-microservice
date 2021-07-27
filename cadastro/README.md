@@ -88,7 +88,8 @@ REST is easy peasy with this Hello World RESTEasy resource.
 14. Adicionar ao Client `front-web-cadastro` Mappers `realm roles`
 15. Editar o Mapper `realm roles` em `front-web-cadastro`
 16. Token Claim Name: `groups`
-
+17. Atualizar a public_key acessando: http://localhost:8180/auth/realms/ifood
+18. Copiar no application.properties a public_key na chave mp.jwt.verify.publickey
 ## Atualizar a chave public no projeto
 
 1. Acessar a url http://localhost:8180/auth/realms/ifood

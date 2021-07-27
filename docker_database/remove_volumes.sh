@@ -31,6 +31,9 @@ docker volume rm docker_database_pgsqldblogsCadastro
 docker volume rm docker_database_pgsqlconfMarketplace
 docker volume rm docker_database_pgsqldataMarketplace
 docker volume rm docker_database_pgsqldblogsMarketplace
+docker volume rm docker_database_pgsqlconfKeycloak
+docker volume rm docker_database_pgsqldataKeycloak
+docker volume rm docker_database_pgsqldblogsKeycloak
 docker network rm net-ifood
 docker volume ls
 docker network ls
