@@ -1,6 +1,6 @@
 package br.com.github.danielso.ifood.entities;
 
-import java.time.LocalDateTime;
+import java.util.Date;
 import java.util.Objects;
 
 import javax.validation.constraints.NotNull;
@@ -13,14 +13,14 @@ public class Localizacao {
 	@NotNull(message = "A longitude não pode ser nula")
 	private Double longitude;
 	private Restaurante restaurante;
-	private LocalDateTime dataCriacao;
-	private LocalDateTime dataAtualizacao;
+	private Date dataCriacao;
+	private Date dataAtualizacao;
 
 	public Localizacao() {
 	}
 
-	public Localizacao(Long id, Double latitude, Double longitude, Restaurante restaurante, LocalDateTime dataCriacao,
-			LocalDateTime dataAtualizacao) {
+	public Localizacao(Long id, Double latitude, Double longitude, Restaurante restaurante, Date dataCriacao,
+			Date dataAtualizacao) {
 		this.id = id;
 		this.latitude = latitude;
 		this.longitude = longitude;
@@ -61,19 +61,19 @@ public class Localizacao {
 		this.restaurante = restaurante;
 	}
 
-	public LocalDateTime getDataCriacao() {
+	public Date getDataCriacao() {
 		return this.dataCriacao;
 	}
 
-	public void setDataCriacao(LocalDateTime dataCriacao) {
+	public void setDataCriacao(Date dataCriacao) {
 		this.dataCriacao = dataCriacao;
 	}
 
-	public LocalDateTime getDataAtualizacao() {
+	public Date getDataAtualizacao() {
 		return this.dataAtualizacao;
 	}
 
-	public void setDataAtualizacao(LocalDateTime dataAtualizacao) {
+	public void setDataAtualizacao(Date dataAtualizacao) {
 		this.dataAtualizacao = dataAtualizacao;
 	}
 
@@ -97,12 +97,12 @@ public class Localizacao {
 		return this;
 	}
 
-	public Localizacao dataCriacao(LocalDateTime dataCriacao) {
+	public Localizacao dataCriacao(Date dataCriacao) {
 		setDataCriacao(dataCriacao);
 		return this;
 	}
 
-	public Localizacao dataAtualizacao(LocalDateTime dataAtualizacao) {
+	public Localizacao dataAtualizacao(Date dataAtualizacao) {
 		setDataAtualizacao(dataAtualizacao);
 		return this;
 	}

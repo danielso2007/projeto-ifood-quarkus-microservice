@@ -1,6 +1,6 @@
 package br.com.github.danielso.ifood.entities;
 
-import java.time.LocalDateTime;
+import java.util.Date;
 import java.util.Objects;
 import java.util.Set;
 
@@ -25,14 +25,14 @@ public class Restaurante {
 	private String nome;
 	private Localizacao localizacao;
 	private Set<Prato> pratos;
-	private LocalDateTime dataCriacao;
-	private LocalDateTime dataAtualizacao;
+	private Date dataCriacao;
+	private Date dataAtualizacao;
 
 	public Restaurante() {
 	}
 
 	public Restaurante(Long id, String proprietario, String cnpj, String nome, Localizacao localizacao,
-			Set<Prato> pratos, LocalDateTime dataCriacao, LocalDateTime dataAtualizacao) {
+			Set<Prato> pratos, Date dataCriacao, Date dataAtualizacao) {
 		this.id = id;
 		this.proprietario = proprietario;
 		this.cnpj = cnpj;
@@ -91,19 +91,19 @@ public class Restaurante {
 		this.pratos = pratos;
 	}
 
-	public LocalDateTime getDataCriacao() {
+	public Date getDataCriacao() {
 		return this.dataCriacao;
 	}
 
-	public void setDataCriacao(LocalDateTime dataCriacao) {
+	public void setDataCriacao(Date dataCriacao) {
 		this.dataCriacao = dataCriacao;
 	}
 
-	public LocalDateTime getDataAtualizacao() {
+	public Date getDataAtualizacao() {
 		return this.dataAtualizacao;
 	}
 
-	public void setDataAtualizacao(LocalDateTime dataAtualizacao) {
+	public void setDataAtualizacao(Date dataAtualizacao) {
 		this.dataAtualizacao = dataAtualizacao;
 	}
 
@@ -137,12 +137,12 @@ public class Restaurante {
 		return this;
 	}
 
-	public Restaurante dataCriacao(LocalDateTime dataCriacao) {
+	public Restaurante dataCriacao(Date dataCriacao) {
 		setDataCriacao(dataCriacao);
 		return this;
 	}
 
-	public Restaurante dataAtualizacao(LocalDateTime dataAtualizacao) {
+	public Restaurante dataAtualizacao(Date dataAtualizacao) {
 		setDataAtualizacao(dataAtualizacao);
 		return this;
 	}

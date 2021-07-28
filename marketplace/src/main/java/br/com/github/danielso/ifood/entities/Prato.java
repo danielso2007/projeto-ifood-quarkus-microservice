@@ -1,7 +1,7 @@
 package br.com.github.danielso.ifood.entities;
 
 import java.math.BigDecimal;
-import java.time.LocalDateTime;
+import java.util.Date;
 import java.util.Objects;
 import java.util.stream.StreamSupport;
 
@@ -31,14 +31,14 @@ public class Prato {
 	@Min(value = 0, message = "Valor não pode ser menor que 0 (Zero)")
 	@Max(value = 9999, message = "Valor não pode ser maior que 9999")
 	private BigDecimal preco;
-	private LocalDateTime dataCriacao;
-	private LocalDateTime dataAtualizacao;
+	private Date dataCriacao;
+	private Date dataAtualizacao;
 
 	public Prato() {
 	}
 
 	public Prato(Long id, String nome, String descricao, Restaurante restaurante, BigDecimal preco,
-			LocalDateTime dataCriacao, LocalDateTime dataAtualizacao) {
+			Date dataCriacao, Date dataAtualizacao) {
 		this.id = id;
 		this.nome = nome;
 		this.descricao = descricao;
@@ -88,19 +88,19 @@ public class Prato {
 		this.preco = preco;
 	}
 
-	public LocalDateTime getDataCriacao() {
+	public Date getDataCriacao() {
 		return this.dataCriacao;
 	}
 
-	public void setDataCriacao(LocalDateTime dataCriacao) {
+	public void setDataCriacao(Date dataCriacao) {
 		this.dataCriacao = dataCriacao;
 	}
 
-	public LocalDateTime getDataAtualizacao() {
+	public Date getDataAtualizacao() {
 		return this.dataAtualizacao;
 	}
 
-	public void setDataAtualizacao(LocalDateTime dataAtualizacao) {
+	public void setDataAtualizacao(Date dataAtualizacao) {
 		this.dataAtualizacao = dataAtualizacao;
 	}
 
@@ -129,12 +129,12 @@ public class Prato {
 		return this;
 	}
 
-	public Prato dataCriacao(LocalDateTime dataCriacao) {
+	public Prato dataCriacao(Date dataCriacao) {
 		setDataCriacao(dataCriacao);
 		return this;
 	}
 
-	public Prato dataAtualizacao(LocalDateTime dataAtualizacao) {
+	public Prato dataAtualizacao(Date dataAtualizacao) {
 		setDataAtualizacao(dataAtualizacao);
 		return this;
 	}
