@@ -1,6 +1,6 @@
 package br.com.github.danielso.ifood.cadastro.entities;
 
-import java.time.LocalDateTime;
+import java.util.Date;
 import java.util.Objects;
 
 import javax.persistence.Column;
@@ -14,42 +14,42 @@ public abstract class BaseAudit extends BaseEntity {
 
 	@CreationTimestamp
 	@Column(name = "data_criacao", nullable = false)
-	private LocalDateTime dataCriacao;
+	private Date dataCriacao;
 
 	@UpdateTimestamp
 	@Column(name = "data_atualizacao", nullable = false)
-	private LocalDateTime dataAtualizacao;
+	private Date dataAtualizacao;
 
 	protected BaseAudit() {
 	}
 
-	protected BaseAudit(LocalDateTime dataCriacao, LocalDateTime dataAtualizacao) {
+	protected BaseAudit(Date dataCriacao, Date dataAtualizacao) {
 		this.dataCriacao = dataCriacao;
 		this.dataAtualizacao = dataAtualizacao;
 	}
 
-	public LocalDateTime getDataCriacao() {
+	public Date getDataCriacao() {
 		return this.dataCriacao;
 	}
 
-	public void setDataCriacao(LocalDateTime dataCriacao) {
+	public void setDataCriacao(Date dataCriacao) {
 		this.dataCriacao = dataCriacao;
 	}
 
-	public LocalDateTime getDataAtualizacao() {
+	public Date getDataAtualizacao() {
 		return this.dataAtualizacao;
 	}
 
-	public void setDataAtualizacao(LocalDateTime dataAtualizacao) {
+	public void setDataAtualizacao(Date dataAtualizacao) {
 		this.dataAtualizacao = dataAtualizacao;
 	}
 
-	public BaseAudit dataCriacao(LocalDateTime dataCriacao) {
+	public BaseAudit dataCriacao(Date dataCriacao) {
 		setDataCriacao(dataCriacao);
 		return this;
 	}
 
-	public BaseAudit dataAtualizacao(LocalDateTime dataAtualizacao) {
+	public BaseAudit dataAtualizacao(Date dataAtualizacao) {
 		setDataAtualizacao(dataAtualizacao);
 		return this;
 	}
@@ -62,7 +62,7 @@ public abstract class BaseAudit extends BaseEntity {
 		return result;
 	}
 
-	@Override
+	@Override	
 	public boolean equals(Object obj) {
 		if (this == obj) {
 			return true;
