@@ -1,4 +1,4 @@
-package br.com.github.danielso.ifood;
+package br.com.github.danielso.ifood.dto;
 
 import java.math.BigDecimal;
 import java.util.Objects;

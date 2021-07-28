@@ -1,4 +1,4 @@
-package br.com.github.danielso.ifood;
+package br.com.github.danielso.ifood.entities;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
@@ -10,6 +10,7 @@ import javax.validation.constraints.Min;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 
+import br.com.github.danielso.ifood.dto.PratoDTO;
 import io.smallrye.mutiny.Multi;
 import io.vertx.mutiny.pgclient.PgPool;
 import io.vertx.mutiny.sqlclient.PreparedQuery;
