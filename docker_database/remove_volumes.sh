@@ -25,9 +25,15 @@ echo -e "${YELLOW}Removendo volumes ...${NC}"
 docker volume rm docker_database_pgadmin4conf
 docker volume rm docker_database_pgadmin4serverdefinitions
 docker volume rm docker_database_pgadmin4sessiondata
-docker volume rm docker_database_pgsqlconf
-docker volume rm docker_database_pgsqldata
-docker volume rm docker_database_pgsqldblogs
-docker network rm docker_database_net-ifood
+docker volume rm docker_database_pgsqlconfCadastro
+docker volume rm docker_database_pgsqldataCadastro
+docker volume rm docker_database_pgsqldblogsCadastro
+docker volume rm docker_database_pgsqlconfMarketplace
+docker volume rm docker_database_pgsqldataMarketplace
+docker volume rm docker_database_pgsqldblogsMarketplace
+docker volume rm docker_database_pgsqlconfKeycloak
+docker volume rm docker_database_pgsqldataKeycloak
+docker volume rm docker_database_pgsqldblogsKeycloak
+docker network rm net-ifood
 docker volume ls
 docker network ls

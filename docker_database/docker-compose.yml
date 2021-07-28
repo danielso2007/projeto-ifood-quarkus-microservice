@@ -1,20 +1,44 @@
 version: "3.9"
 services:
-  pgsql:
+  pgsql-cadastro:
     image: postgres:13.3-alpine
-    container_name: pgsql-13
+    container_name: pgsql-cadastro
     restart: on-failure
     environment:
-      - POSTGRES_USER=postgres
-      - POSTGRES_PASSWORD=postgres
+      - POSTGRES_USER=ifood_cadastro
+      - POSTGRES_PASSWORD=1q2w3e
     ports:
       - "5432:5432"
     volumes:
-      - "pgsqlconf:/etc/postgresql"
-      - "pgsqldata:/var/lib/postgresql/data"
-      - "pgsqldblogs:/var/log"
-      - "./data:/opt/dump"
-  
+      - "pgsqlconfCadastro:/etc/postgresql"
+      - "pgsqldataCadastro:/var/lib/postgresql/data"
+      - "pgsqldblogsCadastro:/var/log"
+  pgsql-marketplace:
+    image: postgres:13.3-alpine
+    container_name: pgsql-marketplace
+    restart: on-failure
+    environment:
+      - POSTGRES_USER=ifood_marketplace
+      - POSTGRES_PASSWORD=1q2w3e
+    ports:
+      - "5433:5432"
+    volumes:
+      - "pgsqlconfMarketplace:/etc/postgresql"
+      - "pgsqldataMarketplace:/var/lib/postgresql/data"
+      - "pgsqldblogsMarketplace:/var/log"
+  pgsql-keycloak:
+    image: postgres:13.3-alpine
+    container_name: pgsql-keycloak
+    restart: on-failure
+    environment:
+      - POSTGRES_USER=keycloak
+      - POSTGRES_PASSWORD=1q2w3e
+    ports:
+      - "5434:5432"
+    volumes:
+      - "pgsqlconfKeycloak:/etc/postgresql"
+      - "pgsqldataKeycloak:/var/lib/postgresql/data"
+      - "pgsqldblogsKeycloak:/var/log"
   pgadmin4:
     image: dpage/pgadmin4:latest
     container_name: pgadmin-4
@@ -29,12 +53,20 @@ services:
       - "pgadmin4conf:/pgadmin4/config_local.py"
       - "pgadmin4serverdefinitions:/pgadmin4/servers.json"
     depends_on:
-      - pgsql
+      - pgsql-cadastro
+      - pgsql-marketplace
+      - pgsql-keycloak
 
 volumes:
-  pgsqlconf:
-  pgsqldata:
-  pgsqldblogs:
+  pgsqlconfMarketplace:
+  pgsqldataMarketplace:
+  pgsqldblogsMarketplace:
+  pgsqlconfCadastro:
+  pgsqldataCadastro:
+  pgsqldblogsCadastro:
+  pgsqlconfKeycloak:
+  pgsqldataKeycloak:
+  pgsqldblogsKeycloak:
   pgadmin4sessiondata:
   pgadmin4conf:
   pgadmin4serverdefinitions:

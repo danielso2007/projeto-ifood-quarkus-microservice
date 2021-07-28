@@ -38,6 +38,11 @@ import org.eclipse.microprofile.openapi.annotations.security.SecurityRequirement
 import org.eclipse.microprofile.openapi.annotations.security.SecurityScheme;
 import org.eclipse.microprofile.openapi.annotations.tags.Tag;
 import org.eclipse.microprofile.opentracing.Traced;
+import org.eclipse.microprofile.reactive.messaging.Channel;
+import org.eclipse.microprofile.reactive.messaging.Emitter;
+
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 import br.com.github.danielso.ifood.cadastro.commons.Constants;
 import br.com.github.danielso.ifood.cadastro.commons.response.ConstraintViolationResponse;
@@ -75,6 +80,10 @@ public class RestauranteResource {
 	@Inject
 	LocalizacaoRepository localizacaoRepository;
 
+	@Inject
+	@Channel("restaurantes")
+	Emitter<String> emitter;
+
 	public RestauranteResource() {
 		// Construtor padrão.
 	}
@@ -107,10 +116,15 @@ public class RestauranteResource {
 	@Tag(name = TAG, description = TAG_DESCRIPTION)
 	@Transactional
 	@Counted(displayName = "Quantidade de restaurante cadastrados", name = "qtd_salvos_restaurante", description = "Quantidades de restaurantes cadastrados", absolute = true)
-	public Response save(@Valid AdicionarRestauranteDTO dto) {
+	public Response save(@Valid AdicionarRestauranteDTO dto) throws JsonProcessingException {
 		var entity = mapper.toRestaurante(dto);
 		repository.persist(entity);
-		return Response.status(Status.CREATED).entity(mapper.toRestauranteDTO(entity)).build();
+
+		var responseDTO = mapper.toRestauranteDTO(entity);
+		
+		sendObject(responseDTO);
+
+		return Response.status(Status.CREATED).entity(responseDTO).build();
 	}
 
 	@PUT
@@ -155,4 +169,7 @@ public class RestauranteResource {
 		return Response.status(Status.OK).build();
 	}
 
+	private void sendObject(RestauranteDTO entity) throws JsonProcessingException {
+		emitter.send(new ObjectMapper().writerWithDefaultPrettyPrinter().writeValueAsString(entity));
+	}
 }
