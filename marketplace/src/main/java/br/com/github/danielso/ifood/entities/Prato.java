@@ -12,10 +12,12 @@ import javax.validation.constraints.NotNull;
 
 import br.com.github.danielso.ifood.dto.PratoDTO;
 import io.smallrye.mutiny.Multi;
+import io.smallrye.mutiny.Uni;
 import io.vertx.mutiny.pgclient.PgPool;
 import io.vertx.mutiny.sqlclient.PreparedQuery;
 import io.vertx.mutiny.sqlclient.Row;
 import io.vertx.mutiny.sqlclient.RowSet;
+import io.vertx.mutiny.sqlclient.Tuple;
 
 public class Prato {
 
@@ -171,8 +173,17 @@ public class Prato {
 	}
 
 	public static Multi<PratoDTO> findAll(PgPool pgPool) {
-		PreparedQuery<RowSet<Row>> preparedQuery = pgPool.preparedQuery("select * from prato_cliente");
-		return preparedQuery.execute().onItem().transformToMulti(rowSet -> Multi.createFrom()
+		PreparedQuery<RowSet<Row>> preparedQuery = pgPool.preparedQuery("SELECT * FROM prato");
+		return unitToMulti(preparedQuery.execute());
+	}
+
+	public static Multi<PratoDTO> findAll(PgPool pgPool, Long idRestaurante) {
+		PreparedQuery<RowSet<Row>> preparedQuery = pgPool.preparedQuery("SELECT * FROM prato WHERE prato.restaurante_id = $1 ORDER BY nome ASC");
+		return unitToMulti(preparedQuery.execute(Tuple.of(idRestaurante)));
+	}
+	
+	private static Multi<PratoDTO> unitToMulti(Uni<RowSet<Row>> uni) {
+		return uni.onItem().transformToMulti(rowSet -> Multi.createFrom()
 				.items(() -> StreamSupport.stream(rowSet.spliterator(), false))).onItem().transform(PratoDTO::from);
 	}
 

@@ -5,7 +5,6 @@ import javax.inject.Named;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
-import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 
@@ -24,10 +23,10 @@ import io.quarkus.reactive.datasource.ReactiveDataSource;
 import io.smallrye.mutiny.Multi;
 import io.vertx.mutiny.pgclient.PgPool;
 
-@Path(Constants.API_VERSION)
+@Path(Constants.API_VERSION + Constants.REST_PRATOS)
 @Produces(MediaType.APPLICATION_JSON)
 @Consumes(MediaType.APPLICATION_JSON)
-public class PratoResource {
+public class RestaurantesResource {
 
 	private static final String TAG = "Pratos";
 	private static final String TAG_DESCRIPTION = "Representa os pratos de um restaurante";
@@ -38,13 +37,12 @@ public class PratoResource {
 	PgPool pgPool;
 
 	@GET
-	@Path("{idRestaurante}/pratos")
 	@APIResponses(value = {
 			@APIResponse(responseCode = "200", description = "Registros listados com sucesso", content = @Content(mediaType = "application/json", schema = @Schema(type = SchemaType.ARRAY, implementation = PratoDTO.class))),
 			@APIResponse(responseCode = "400", description = "Erro na obtenção dos dados", content = @Content(mediaType = "application/json")),
 			@APIResponse(responseCode = "500", description = "Erro interno do servidor", content = @Content(mediaType = "application/json", schema = @Schema(allOf = ErrorResponse.class))) })
 	@Tag(name = TAG, description = TAG_DESCRIPTION)
-	public Multi<PratoDTO> buscarPratos(@PathParam("idRestaurante") Long idRestaurante) {
-		return Prato.findAll(pgPool, idRestaurante);
+	public Multi<PratoDTO> buscarPratos() {
+		return Prato.findAll(pgPool);
 	}
 }

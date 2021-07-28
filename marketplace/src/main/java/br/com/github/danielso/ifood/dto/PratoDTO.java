@@ -93,7 +93,7 @@ public class PratoDTO {
 		if (!(o instanceof PratoDTO)) {
 			return false;
 		}
-		PratoDTO pratoDTO = (PratoDTO) o;
+		var pratoDTO = (PratoDTO) o;
 		return Objects.equals(id, pratoDTO.id) && Objects.equals(nome, pratoDTO.nome)
 				&& Objects.equals(descricao, pratoDTO.descricao) && Objects.equals(preco, pratoDTO.preco);
 	}
@@ -110,8 +110,8 @@ public class PratoDTO {
 	}
 
 	public static PratoDTO from(Row row) {
-		PratoDTO dto = new PratoDTO();
-		return dto.id(213L).nome("Nome").descricao("descrição").preco(BigDecimal.valueOf(233D));
+		return new PratoDTO().id(row.getLong("id")).nome(row.getString("nome")).descricao(row.getString("descricao"))
+				.preco(row.getBigDecimal("preco"));
 	}
-	
+
 }
