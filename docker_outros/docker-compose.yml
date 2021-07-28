@@ -35,6 +35,20 @@ services:
       - "14250:14250"
       - "9411:9411"
 
+  activemq_ifood:
+    image: vromero/activemq-artemis:2.11.0
+    container_name: activemq_ifood
+    environment:
+      - ARTEMIS_USERNAME=admin
+      - ARTEMIS_PASSWORD=admin
+    ports:
+      - "61616:61616"
+      - "61613:61613"
+      - "8161:8161"
+    volumes:
+      - ./activemq_ifood/persistent/dir/conf:/opt/activemq/conf
+      - ./activemq_ifood/persistent/dir/data:/opt/activemq/data
+
 networks:
   default:
     external: true
