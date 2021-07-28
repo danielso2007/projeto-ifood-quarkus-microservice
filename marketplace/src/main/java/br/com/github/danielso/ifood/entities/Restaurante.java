@@ -9,6 +9,12 @@ import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 
+import io.smallrye.mutiny.Uni;
+import io.vertx.mutiny.pgclient.PgPool;
+import io.vertx.mutiny.sqlclient.Row;
+import io.vertx.mutiny.sqlclient.RowSet;
+import io.vertx.mutiny.sqlclient.Tuple;
+
 public class Restaurante {
 
 	private Long id;
@@ -174,6 +180,21 @@ public class Restaurante {
 				+ getNome() + ", getLocalizacao()=" + getLocalizacao() + ", getPratos()=" + getPratos()
 				+ ", hashCode()=" + hashCode() + ", getDataCriacao()=" + getDataCriacao() + ", getDataAtualizacao()="
 				+ getDataAtualizacao() + ", getId()=" + getId() + "]";
+	}
+
+	public void persist(PgPool pgPool) {
+		System.out.println("--------------- localizacao ------------------");
+		Uni<RowSet<Row>> localizacao = pgPool.preparedQuery("INSERT INTO public.localizacao(id, data_atualizacao, data_criacao, latitude, longitude) VALUES ($1, NOW(), NOW(), $2, $3) RETURNING (id)")
+				.execute(Tuple.of(getLocalizacao().getId(), getLocalizacao().getLatitude(), getLocalizacao().getLongitude()));
+
+		localizacao.map(rs -> rs.iterator().next().getLong("id"));
+		
+		System.out.println("--------------- restaurante ------------------");
+		
+		Uni<RowSet<Row>> restaurante = pgPool.preparedQuery("INSERT INTO public.restaurante(data_atualizacao, data_criacao, id, cnpj, nome, proprietario, localizacao_id) VALUES (NOW(), NOW(), $1, $2, $3, $4) RETURNING (id)")
+				.execute(Tuple.of(getId(), getCnpj(), getNome(), getProprietario(), getLocalizacao().getId()));
+		
+		restaurante.map(rs -> rs.iterator().next().getLong("id"));
 	}
 
 }

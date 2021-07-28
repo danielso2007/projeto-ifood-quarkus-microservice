@@ -1,16 +1,10 @@
 -- Table: public.prato
 
-CREATE SEQUENCE public.prato_id_seq
-    INCREMENT 1
-    START 1
-    MINVALUE 1
-    MAXVALUE 99999999999;
-
 -- DROP TABLE public.prato;
 
 CREATE TABLE IF NOT EXISTS public.prato
 (
-    id bigint NOT NULL DEFAULT nextval('prato_id_seq'::regclass),
+    id bigint NOT NULL,
     data_atualizacao timestamp without time zone NOT NULL,
     data_criacao timestamp without time zone NOT NULL,
     descricao character varying(500) COLLATE pg_catalog."default" NOT NULL,
