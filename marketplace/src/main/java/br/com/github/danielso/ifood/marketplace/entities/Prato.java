@@ -14,7 +14,6 @@ import br.com.github.danielso.ifood.marketplace.dto.PratoDTO;
 import io.smallrye.mutiny.Multi;
 import io.smallrye.mutiny.Uni;
 import io.vertx.mutiny.pgclient.PgPool;
-import io.vertx.mutiny.sqlclient.PreparedQuery;
 import io.vertx.mutiny.sqlclient.Row;
 import io.vertx.mutiny.sqlclient.RowSet;
 import io.vertx.mutiny.sqlclient.Tuple;
@@ -39,8 +38,8 @@ public class Prato {
 	public Prato() {
 	}
 
-	public Prato(Long id, String nome, String descricao, Restaurante restaurante, BigDecimal preco,
-			Date dataCriacao, Date dataAtualizacao) {
+	public Prato(Long id, String nome, String descricao, Restaurante restaurante, BigDecimal preco, Date dataCriacao,
+			Date dataAtualizacao) {
 		this.id = id;
 		this.nome = nome;
 		this.descricao = descricao;
@@ -173,18 +172,26 @@ public class Prato {
 	}
 
 	public static Multi<PratoDTO> findAll(PgPool pgPool) {
-		PreparedQuery<RowSet<Row>> preparedQuery = pgPool.preparedQuery("SELECT * FROM prato");
-		return unitToMulti(preparedQuery.execute());
+		Uni<RowSet<Row>> preparedQuery = pgPool.query("select * from prato").execute();
+		return unitToMulti(preparedQuery);
 	}
 
-	public static Multi<PratoDTO> findAll(PgPool pgPool, Long idRestaurante) {
-		PreparedQuery<RowSet<Row>> preparedQuery = pgPool.preparedQuery("SELECT * FROM prato WHERE prato.restaurante_id = $1 ORDER BY nome ASC");
-		return unitToMulti(preparedQuery.execute(Tuple.of(idRestaurante)));
+	public static Multi<PratoDTO> findAll(PgPool client, Long idRestaurante) {
+		Uni<RowSet<Row>> preparedQuery = client
+				.preparedQuery("SELECT * FROM prato where prato.restaurante_id = $1 ORDER BY nome ASC")
+				.execute(Tuple.of(idRestaurante));
+		return unitToMulti(preparedQuery);
 	}
-	
-	private static Multi<PratoDTO> unitToMulti(Uni<RowSet<Row>> uni) {
-		return uni.onItem().transformToMulti(rowSet -> Multi.createFrom()
-				.items(() -> StreamSupport.stream(rowSet.spliterator(), false))).onItem().transform(PratoDTO::from);
+
+	private static Multi<PratoDTO> unitToMulti(Uni<RowSet<Row>> queryResult) {
+		return queryResult.onItem().produceMulti(set -> Multi.createFrom().items(() -> {
+			return StreamSupport.stream(set.spliterator(), false);
+		})).onItem().apply(PratoDTO::from);
+	}
+
+	public static Uni<PratoDTO> findById(PgPool client, Long id) {
+		return client.preparedQuery("SELECT * FROM prato WHERE id = $1").execute(Tuple.of(id)).map(RowSet::iterator)
+				.map(iterator -> iterator.hasNext() ? PratoDTO.from(iterator.next()) : null);
 	}
 
 }
