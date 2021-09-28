@@ -1,4 +1,4 @@
-package br.com.github.danielso.ifood.mp;
+package br.com.github.danielso.ifood.marketplace.mp;
 
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
@@ -11,7 +11,7 @@ import org.jboss.logging.Logger;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-import br.com.github.danielso.ifood.entities.Restaurante;
+import br.com.github.danielso.ifood.marketplace.entities.Restaurante;
 import io.quarkus.reactive.datasource.ReactiveDataSource;
 import io.vertx.mutiny.pgclient.PgPool;
 

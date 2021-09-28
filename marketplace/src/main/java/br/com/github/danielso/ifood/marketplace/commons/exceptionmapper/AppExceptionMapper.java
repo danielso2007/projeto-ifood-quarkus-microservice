@@ -1,4 +1,4 @@
-package br.com.github.danielso.ifood.commons.exceptionmapper;
+package br.com.github.danielso.ifood.marketplace.commons.exceptionmapper;
 
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
@@ -7,7 +7,7 @@ import javax.ws.rs.ext.Provider;
 
 import org.apache.commons.lang3.exception.ExceptionUtils;
 
-import br.com.github.danielso.ifood.commons.response.ErrorResponse;
+import br.com.github.danielso.ifood.marketplace.commons.response.ErrorResponse;
 
 @Provider
 public class AppExceptionMapper implements ExceptionMapper<Exception> {

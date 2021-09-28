@@ -1,4 +1,4 @@
-package br.com.github.danielso.ifood.dto;
+package br.com.github.danielso.ifood.marketplace.dto;
 
 import java.math.BigDecimal;
 import java.util.Objects;

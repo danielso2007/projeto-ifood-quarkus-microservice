@@ -1,4 +1,4 @@
-package br.com.github.danielso.ifood.entities;
+package br.com.github.danielso.ifood.marketplace.entities;
 
 import java.util.Objects;
 

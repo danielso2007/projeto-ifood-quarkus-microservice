@@ -1,4 +1,4 @@
-package br.com.github.danielso.ifood.commons.response;
+package br.com.github.danielso.ifood.marketplace.commons.response;
 
 import java.io.Serializable;
 import java.util.stream.Collectors;

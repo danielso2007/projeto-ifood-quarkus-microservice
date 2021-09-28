@@ -1,4 +1,4 @@
-package br.com.github.danielso.ifood.commons;
+package br.com.github.danielso.ifood.marketplace.commons;
 
 public final class Constants {
 	

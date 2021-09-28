@@ -1,4 +1,4 @@
-package br.com.github.danielso.ifood.entities;
+package br.com.github.danielso.ifood.marketplace.entities;
 
 import java.math.BigDecimal;
 import java.util.Date;
@@ -10,7 +10,7 @@ import javax.validation.constraints.Min;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 
-import br.com.github.danielso.ifood.dto.PratoDTO;
+import br.com.github.danielso.ifood.marketplace.dto.PratoDTO;
 import io.smallrye.mutiny.Multi;
 import io.smallrye.mutiny.Uni;
 import io.vertx.mutiny.pgclient.PgPool;
