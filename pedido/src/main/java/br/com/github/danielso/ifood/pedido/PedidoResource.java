@@ -1,4 +1,4 @@
-package br.com.github.danielso.ifood;
+package br.com.github.danielso.ifood.pedido;
 
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
