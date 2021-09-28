@@ -68,7 +68,7 @@ services:
     hostname: "kafka-node-ifood"
     restart: "no"
     ports:
-      - "9092:9092"
+      - "9192:9192"
     links:
       - "zookeeper-ifood:zookeeper-ifood"
     depends_on:

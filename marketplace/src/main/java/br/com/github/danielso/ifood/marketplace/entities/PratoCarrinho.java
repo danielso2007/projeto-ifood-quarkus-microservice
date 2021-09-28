@@ -77,14 +77,13 @@ public class PratoCarrinho {
 	}
 
 	public static Uni<Long> save(PgPool client, String cliente, Long prato) {
-		return client.preparedQuery("INSERT INTO prato_cliente (cliente, prato) VALUES ($1, $2) RETURNING (cliente)")
+		return client.preparedQuery("INSERT INTO public.prato_cliente (cliente, prato) VALUES ($1, $2) RETURNING (prato)")
 				.execute(Tuple.of(cliente, prato))
-
-				.map(pgRowSet -> pgRowSet.iterator().next().getLong("cliente"));
+				.map(pgRowSet -> pgRowSet.iterator().next().getLong("prato"));
 	}
 
 	public static Uni<List<PratoCarrinho>> findCarrinho(PgPool client, String cliente) {
-		return client.preparedQuery("select * from prato_cliente where cliente = $1 ").execute(Tuple.of(cliente))
+		return client.preparedQuery("select * from public.prato_cliente where cliente = $1 ").execute(Tuple.of(cliente))
 				.map(pgRowSet -> {
 					List<PratoCarrinho> list = new ArrayList<>(pgRowSet.size());
 					for (Row row : pgRowSet) {

@@ -1,7 +1,6 @@
 package br.com.github.danielso.ifood.marketplace.resources;
 
 import javax.inject.Inject;
-import javax.inject.Named;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
@@ -23,7 +22,6 @@ import br.com.github.danielso.ifood.marketplace.commons.Constants;
 import br.com.github.danielso.ifood.marketplace.commons.response.ErrorResponse;
 import br.com.github.danielso.ifood.marketplace.dto.PratoDTO;
 import br.com.github.danielso.ifood.marketplace.entities.Prato;
-import io.quarkus.reactive.datasource.ReactiveDataSource;
 import io.smallrye.mutiny.Multi;
 import io.vertx.mutiny.pgclient.PgPool;
 
@@ -36,8 +34,6 @@ public class PratoResource {
 	private static final String TAG_DESCRIPTION = "Representa os pratos de um restaurante";
 
 	@Inject
-	@ReactiveDataSource("marketplace")
-	@Named("marketplace")
 	PgPool pgPool;
 
 	@GET

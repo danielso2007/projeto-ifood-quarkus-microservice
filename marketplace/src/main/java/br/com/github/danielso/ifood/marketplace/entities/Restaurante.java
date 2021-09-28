@@ -4,19 +4,17 @@ import java.util.Date;
 import java.util.Objects;
 import java.util.Set;
 
+import javax.transaction.Transactional;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 
-import org.jboss.logging.Logger;
-
+import io.smallrye.reactive.messaging.annotations.Blocking;
 import io.vertx.mutiny.pgclient.PgPool;
 import io.vertx.mutiny.sqlclient.Tuple;
 
 public class Restaurante {
-
-	private static final Logger LOG = Logger.getLogger(Restaurante.class);
 
 	private Long id;
 	@NotEmpty(message = "O nome do proprietário não pode ser vazio")
@@ -183,14 +181,16 @@ public class Restaurante {
 				+ getDataAtualizacao() + ", getId()=" + getId() + "]";
 	}
 
+	@Blocking
+    @Transactional
 	public void persist(PgPool pgPool) {
-		pgPool.preparedQuery("insert into localizacao (id, latitude, longitude) values ($1, $2, $3)")
-				.execute(Tuple.of(localizacao.getId(), localizacao.getLatitude(), localizacao.getLongitude())).await()
-				.indefinitely();
+		pgPool.preparedQuery("INSERT INTO public.localizacao (id, latitude, longitude) VALUES ($1, $2, $3) RETURNING (id) ")
+				.execute(Tuple.of(localizacao.getId(), localizacao.getLatitude(), localizacao.getLongitude()))
+				.map(pgRowSet -> pgRowSet.iterator().next().getLong("id"));
 
-		pgPool.preparedQuery("insert into restaurante (id, nome, localizacao_id) values ($1, $2, $3)")
-				.execute(Tuple.of(id, nome, localizacao.getId())).await().indefinitely();
-
+		pgPool.preparedQuery("INSERT INTO public.restaurante (id, nome, localizacao_id) VALUES ($1, $2, $3)  RETURNING (nome) ")
+				.execute(Tuple.of(id, nome, localizacao.getId()))
+				.map(pgRowSet -> pgRowSet.iterator().next().getLong("nome"));
 	}
 
 }

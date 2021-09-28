@@ -23,8 +23,9 @@ import br.com.github.danielso.ifood.marketplace.dto.RestauranteDTO;
 import br.com.github.danielso.ifood.marketplace.entities.Prato;
 import br.com.github.danielso.ifood.marketplace.entities.PratoCarrinho;
 import io.smallrye.mutiny.Uni;
+import io.vertx.mutiny.pgclient.PgPool;
 
-@Path(Constants.API_VERSION)
+@Path(Constants.API_VERSION + Constants.REST_CARRINHO)
 @Produces(MediaType.APPLICATION_JSON)
 @Consumes(MediaType.APPLICATION_JSON)
 public class CarrinhoResource {
@@ -32,7 +33,7 @@ public class CarrinhoResource {
 	private static final String CLIENTE = "a";
 
     @Inject
-    io.vertx.mutiny.pgclient.PgPool client;
+    PgPool client;
 
     @Inject
     @Channel("pedidos")
@@ -67,7 +68,14 @@ public class CarrinhoResource {
         RestauranteDTO restaurante = new RestauranteDTO();
         restaurante.nome = "nome restaurante";
         pedido.restaurante = restaurante;
-        emitterPedido.send(pedido);
+        
+        emitterPedido.send(pedido).whenComplete((success, failure) -> {
+            if (failure != null) {
+                System.out.println("D'oh! " + failure.getMessage());
+            } else {
+                System.out.println("Message processed successfully");
+            }
+        });;
         return PratoCarrinho.delete(client, cliente);
     }
 
