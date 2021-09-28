@@ -4,10 +4,13 @@ import java.util.Date;
 import java.util.Objects;
 import java.util.Set;
 
+import javax.transaction.Transactional;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
+
+import org.jboss.logging.Logger;
 
 import io.smallrye.mutiny.Uni;
 import io.vertx.mutiny.pgclient.PgPool;
@@ -17,6 +20,8 @@ import io.vertx.mutiny.sqlclient.Tuple;
 
 public class Restaurante {
 
+	private static final Logger LOG = Logger.getLogger(Restaurante.class);
+	
 	private Long id;
 	@NotEmpty(message = "O nome do proprietário não pode ser vazio")
 	@NotNull(message = "O nome do proprietário não pode ser nulo")
@@ -182,19 +187,20 @@ public class Restaurante {
 				+ getDataAtualizacao() + ", getId()=" + getId() + "]";
 	}
 
+	@Transactional
 	public void persist(PgPool pgPool) {
-		System.out.println("--------------- localizacao ------------------");
-		Uni<RowSet<Row>> localizacao = pgPool.preparedQuery("INSERT INTO public.localizacao(id, data_atualizacao, data_criacao, latitude, longitude) VALUES ($1, NOW(), NOW(), $2, $3) RETURNING (id)")
+		LOG.info("--------------- Gravando localizacao ------------------");
+		Uni<RowSet<Row>> localizacaoPgPool = pgPool.preparedQuery("INSERT INTO public.localizacao(id, data_atualizacao, data_criacao, latitude, longitude) VALUES ($1, NOW(), NOW(), $2, $3) RETURNING (id)")
 				.execute(Tuple.of(getLocalizacao().getId(), getLocalizacao().getLatitude(), getLocalizacao().getLongitude()));
 
-		localizacao.map(rs -> rs.iterator().next().getLong("id"));
+		localizacaoPgPool.map(rs -> rs.iterator().next().getLong("id"));
 		
-		System.out.println("--------------- restaurante ------------------");
+		LOG.info("--------------- Gravando restaurante ------------------");
 		
-		Uni<RowSet<Row>> restaurante = pgPool.preparedQuery("INSERT INTO public.restaurante(data_atualizacao, data_criacao, id, cnpj, nome, proprietario, localizacao_id) VALUES (NOW(), NOW(), $1, $2, $3, $4) RETURNING (id)")
+		Uni<RowSet<Row>> restaurantePgPool = pgPool.preparedQuery("INSERT INTO public.restaurante(data_atualizacao, data_criacao, id, cnpj, nome, proprietario, localizacao_id) VALUES (NOW(), NOW(), $1, $2, $3, $4) RETURNING (id)")
 				.execute(Tuple.of(getId(), getCnpj(), getNome(), getProprietario(), getLocalizacao().getId()));
 		
-		restaurante.map(rs -> rs.iterator().next().getLong("id"));
+		restaurantePgPool.map(rs -> rs.iterator().next().getLong("id"));
 	}
 
 }
