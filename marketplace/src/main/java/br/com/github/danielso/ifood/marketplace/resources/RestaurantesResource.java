@@ -45,9 +45,9 @@ public class RestaurantesResource {
 			@APIResponse(responseCode = "400", description = "Erro na obtenção dos dados", content = @Content(mediaType = "application/json")),
 			@APIResponse(responseCode = "500", description = "Erro interno do servidor", content = @Content(mediaType = "application/json", schema = @Schema(allOf = ErrorResponse.class))) })
 	@Tag(name = TAG, description = TAG_DESCRIPTION)
-	@Counted(displayName = "Quantidade buscas de pratos", name = "qtd_busca_pratos", description = "Quantidades de buscas de pratos", absolute = true)
-	@SimplyTimed(displayName = "Tempo buscas de pratos", name = "tempo_simples_busca_pratos", absolute = true)
-	@Timed(displayName = "Tempo completo buscas de pratos", name = "tempo_completo_de_busca_pratos")
+	@Counted(displayName = "Quantidade buscas de pratos", name = "marketplace_qtd_busca_pratos", description = "Quantidades de buscas de pratos", absolute = true)
+	@SimplyTimed(displayName = "Tempo buscas de pratos", name = "marketplace_tempo_simples_busca_pratos", absolute = true)
+	@Timed(displayName = "Tempo completo buscas de pratos", name = "marketplace_tempo_completo_de_busca_pratos", absolute = true, description = "O tempo ao buscar pratos")
 	public Multi<PratoDTO> buscarPratos() {
 		return Prato.findAll(pgPool);
 	}

@@ -94,9 +94,9 @@ public class RestauranteResource {
 			@APIResponse(responseCode = "400", description = "Erro na obtenção dos dados ou filtro", content = @Content(mediaType = "application/json", schema = @Schema(allOf = ConstraintViolationResponse.class))),
 			@APIResponse(responseCode = "500", description = "Erro interno do servidor", content = @Content(mediaType = "application/json", schema = @Schema(allOf = ErrorResponse.class))) })
 	@Tag(name = TAG, description = TAG_DESCRIPTION)
-	@Counted(displayName = "Quantidade buscas de restaurante", name = "qtd_busca_restaurante", description = "Quantidades de buscas de restaurantes", absolute = true)
-	@SimplyTimed(displayName = "Tempo buscas de restaurante", name = "tempo_simples_busca", absolute = true)
-	@Timed(displayName = "Tempo completo buscas de restaurante", name = "tempo_completo_de_busca")
+	@Counted(displayName = "Quantidade buscas de restaurante", name = "cadastro_restaurante_qtd_busca", description = "Quantidades de buscas de restaurantes", absolute = true)
+	@SimplyTimed(displayName = "Tempo buscas de restaurante", name = "cadastro_restaurante_tempo_simples_busca", absolute = true)
+	@Timed(displayName = "Tempo completo buscas de restaurante", name = "cadastro_restaurante_tempo_completo_de_busca", absolute = true)
 	public List<RestauranteDTO> getAll(@QueryParam("sort") @DefaultValue("id") String sortField,
 			@QueryParam("order") @DefaultValue(DEFAULT_ORDER) String order) {
 		String[] fields = sortField.contains(",") ? sortField.split(",") : sortField.split(";");
@@ -115,7 +115,7 @@ public class RestauranteResource {
 			@APIResponse(responseCode = "500", description = "Erro interno do servidor", content = @Content(mediaType = "application/json", schema = @Schema(allOf = ErrorResponse.class))) })
 	@Tag(name = TAG, description = TAG_DESCRIPTION)
 	@Transactional
-	@Counted(displayName = "Quantidade de restaurante cadastrados", name = "qtd_salvos_restaurante", description = "Quantidades de restaurantes cadastrados", absolute = true)
+	@Counted(displayName = "Quantidade de restaurante cadastrados", name = "cadastro_restaurante_qtd_salvos_restaurante", description = "Quantidades de restaurantes cadastrados", absolute = true)
 	public Response save(@Valid AdicionarRestauranteDTO dto) throws JsonProcessingException {
 		var entity = mapper.toRestaurante(dto);
 		repository.persist(entity);
@@ -136,7 +136,7 @@ public class RestauranteResource {
 			@APIResponse(responseCode = "500", description = "Erro interno do servidor", content = @Content(mediaType = "application/json", schema = @Schema(allOf = ErrorResponse.class))) })
 	@Tag(name = TAG, description = TAG_DESCRIPTION)
 	@Transactional
-	@Counted(displayName = "Quantidade de restaurante atualizados", name = "qtd_atualizacao_restaurante", description = "Quantidades de restaurantes atualizados", absolute = true)
+	@Counted(displayName = "Quantidade de restaurante atualizados", name = "cadastro_restaurante_qtd_atualizacao", description = "Quantidades de restaurantes atualizados", absolute = true)
 	public Response update(@PathParam("id") Long id, @Valid AdicionarRestauranteDTO dto) {
 		Restaurante entity = repository.findByIdOptional(id).orElseThrow(NotFoundException::new);
 		mapper.toRestaurante(dto, entity);
@@ -151,7 +151,7 @@ public class RestauranteResource {
 			@APIResponse(responseCode = "404", description = "Registro não encontrado.", content = @Content(mediaType = "application/json")),
 			@APIResponse(responseCode = "500", description = "Erro interno do servidor", content = @Content(mediaType = "application/json", schema = @Schema(allOf = ErrorResponse.class))) })
 	@Tag(name = TAG, description = TAG_DESCRIPTION)
-	@Counted(displayName = "Quantidade de restaurante pesquisados por ID", name = "qtd_restaurante_por_id", description = "Quantidades de restaurantes pesquisa por ID", absolute = true)
+	@Counted(displayName = "Quantidade de restaurantes pesquisados por ID", name = "cadastro_restaurantes_qtd_por_id", description = "Quantidades de restaurantes pesquisa por ID", absolute = true)
 	public RestauranteDTO getById(@PathParam("id") Long id) {
 		return repository.findByIdOptional(id).map(mapper::toRestauranteDTO).orElseThrow(NotFoundException::new);
 	}
@@ -163,7 +163,7 @@ public class RestauranteResource {
 			@APIResponse(responseCode = "500", description = "Erro interno do servidor", content = @Content(mediaType = "application/json", schema = @Schema(allOf = ErrorResponse.class))) })
 	@Tag(name = TAG, description = TAG_DESCRIPTION)
 	@Transactional
-	@Counted(displayName = "Quantidade de restaurante deletados", name = "qtd_delete_restaurante", description = "Quantidades de restaurantes deletados", absolute = true)
+	@Counted(displayName = "Quantidade de restaurante deletados", name = "cadastro_restaurante_qtd_delete", description = "Quantidades de restaurantes deletados", absolute = true)
 	public Response delete(@PathParam("id") Long id) {
 		repository.delete(repository.findByIdOptional(id).orElseThrow(NotFoundException::new));
 		return Response.status(Status.OK).build();

@@ -22,6 +22,9 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
 
+import org.eclipse.microprofile.metrics.annotation.Counted;
+import org.eclipse.microprofile.metrics.annotation.SimplyTimed;
+import org.eclipse.microprofile.metrics.annotation.Timed;
 import org.eclipse.microprofile.openapi.annotations.enums.SchemaType;
 import org.eclipse.microprofile.openapi.annotations.media.Content;
 import org.eclipse.microprofile.openapi.annotations.media.Schema;
@@ -70,6 +73,9 @@ public class PratosResource {
 			@APIResponse(responseCode = "400", description = "Erro na obtenção dos dados ou filtro", content = @Content(mediaType = "application/json")),
 			@APIResponse(responseCode = "500", description = "Erro interno do servidor", content = @Content(mediaType = "application/json", schema = @Schema(allOf = ErrorResponse.class))) })
 	@Tag(name = TAG, description = TAG_DESCRIPTION)
+	@Counted(displayName = "Quantidade buscas de pratos", name = "cadastro_pratos_qtd_busca", description = "Quantidades de buscas de pratos", absolute = true)
+	@SimplyTimed(displayName = "Tempo buscas de pratos", name = "cadastro_pratos_tempo_simples_busca", absolute = true)
+	@Timed(displayName = "Tempo completo buscas de pratos", name = "cadastro_pratos_tempo_completo_de_busca", absolute = true)
 	public List<PratoDTO> getAll(@PathParam("idRestaurante") Long idRestaurante,
 			@QueryParam("sort") @DefaultValue("id") String sortField,
 			@QueryParam("order") @DefaultValue(DEFAULT_ORDER) String order) {
@@ -90,6 +96,7 @@ public class PratosResource {
 			@APIResponse(responseCode = "500", description = "Erro interno do servidor", content = @Content(mediaType = "application/json", schema = @Schema(allOf = ErrorResponse.class))) })
 	@Tag(name = TAG, description = TAG_DESCRIPTION)
 	@Transactional
+	@Counted(displayName = "Quantidade de pratos cadastrados", name = "cadastro_pratos_qtd_salvos_restaurante", description = "Quantidades de pratos cadastrados", absolute = true)
 	public Response save(@PathParam("idRestaurante") Long idRestaurante, @Valid AdicionarPratoDTO dto) {
 		var entity = mapper.toPrato(dto);
 		entity.setRestaurante(findRestaurante(idRestaurante));
@@ -106,6 +113,7 @@ public class PratosResource {
 			@APIResponse(responseCode = "500", description = "Erro interno do servidor", content = @Content(mediaType = "application/json", schema = @Schema(allOf = ErrorResponse.class))) })
 	@Tag(name = TAG, description = TAG_DESCRIPTION)
 	@Transactional
+	@Counted(displayName = "Quantidade de pratos atualizados", name = "cadastro_pratos_qtd_atualizacao", description = "Quantidades de pratos atualizados", absolute = true)
 	public Response update(@PathParam("idRestaurante") Long idRestaurante, @PathParam("id") Long id,
 			@Valid AdicionarPratoDTO dto) {
 		Prato entity = repository.findByIdAndRestauranteId(id, idRestaurante).orElseThrow(NotFoundException::new);
@@ -121,6 +129,7 @@ public class PratosResource {
 			@APIResponse(responseCode = "404", description = "Registro não encontrado.", content = @Content(mediaType = "application/json")),
 			@APIResponse(responseCode = "500", description = "Erro interno do servidor", content = @Content(mediaType = "application/json", schema = @Schema(allOf = ErrorResponse.class))) })
 	@Tag(name = TAG, description = TAG_DESCRIPTION)
+	@Counted(displayName = "Quantidade de pratos pesquisados por ID", name = "cadastro_pratos_qtd_por_id", description = "Quantidades de pratos pesquisa por ID", absolute = true)
 	public PratoDTO getById(@PathParam("idRestaurante") Long idRestaurante, @PathParam("id") Long id) {
 		return repository.findByIdAndRestauranteId(id, idRestaurante).map(mapper::toPratoDTO).orElseThrow(NotFoundException::new);
 	}
@@ -132,6 +141,7 @@ public class PratosResource {
 			@APIResponse(responseCode = "500", description = "Erro interno do servidor", content = @Content(mediaType = "application/json", schema = @Schema(allOf = ErrorResponse.class))) })
 	@Tag(name = TAG, description = TAG_DESCRIPTION)
 	@Transactional
+	@Counted(displayName = "Quantidade de pratos deletados", name = "cadastro_pratos_qtd_delete", description = "Quantidades de pratos deletados", absolute = true)
 	public Response delete(@PathParam("idRestaurante") Long idRestaurante, @PathParam("id") Long id) {
 		repository.delete(repository.findByIdAndRestauranteId(id, idRestaurante).orElseThrow(NotFoundException::new));
 		return Response.status(Status.OK).build();
