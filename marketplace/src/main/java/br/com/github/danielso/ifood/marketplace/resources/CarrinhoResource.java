@@ -1,6 +1,7 @@
 package br.com.github.danielso.ifood.marketplace.resources;
 
 import java.util.List;
+import java.util.concurrent.CompletableFuture;
 import java.util.stream.Collectors;
 
 import javax.inject.Inject;
@@ -14,6 +15,7 @@ import javax.ws.rs.core.MediaType;
 
 import org.eclipse.microprofile.reactive.messaging.Channel;
 import org.eclipse.microprofile.reactive.messaging.Emitter;
+import org.eclipse.microprofile.reactive.messaging.Message;
 
 import br.com.github.danielso.ifood.marketplace.commons.Constants;
 import br.com.github.danielso.ifood.marketplace.dto.PedidoRealizadoDTO;
@@ -32,29 +34,29 @@ public class CarrinhoResource {
 
 	private static final String CLIENTE = "a";
 
-    @Inject
-    PgPool client;
+	@Inject
+	PgPool client;
 
-    @Inject
-    @Channel("pedidos")
-    Emitter<PedidoRealizadoDTO> emitterPedido;
+	@Inject
+	@Channel("pedidos")
+	Emitter<PedidoRealizadoDTO> emitterPedido;
 
-    @GET
-    public Uni<List<PratoCarrinho>> buscarcarrinho() {
-        return PratoCarrinho.findCarrinho(client, CLIENTE);
-    }
+	@GET
+	public Uni<List<PratoCarrinho>> buscarcarrinho() {
+		return PratoCarrinho.findCarrinho(client, CLIENTE);
+	}
 
-    @POST
-    @Path("/prato/{idPrato}")
-    public Uni<Long> adicionarPrato(@PathParam("idPrato") Long idPrato) {
-        //poderia retornar o pedido atual
-        PratoCarrinho pc = new PratoCarrinho();
-        pc.cliente(CLIENTE).prato(idPrato);
-        return PratoCarrinho.save(client, CLIENTE, idPrato);
+	@POST
+	@Path("/prato/{idPrato}")
+	public Uni<Long> adicionarPrato(@PathParam("idPrato") Long idPrato) {
+		// poderia retornar o pedido atual
+		PratoCarrinho pc = new PratoCarrinho();
+		pc.cliente(CLIENTE).prato(idPrato);
+		return PratoCarrinho.save(client, CLIENTE, idPrato);
 
-    }
+	}
 
-    @POST
+	@POST
     @Path("/realizar-pedido")
     public Uni<Boolean> finalizar() {
         PedidoRealizadoDTO pedido = new PedidoRealizadoDTO();
@@ -69,19 +71,23 @@ public class CarrinhoResource {
         restaurante.nome = "nome restaurante";
         pedido.restaurante = restaurante;
         
-        emitterPedido.send(pedido).whenComplete((success, failure) -> {
-            if (failure != null) {
-                System.out.println("D'oh! " + failure.getMessage());
-            } else {
-                System.out.println("Message processed successfully");
-            }
-        });;
+        emitterPedido.send(Message.of(pedido).withAck(() -> {
+            // Called when the message is acked
+        	System.out.println("Called when the message is acked");
+            return CompletableFuture.completedFuture(null);
+        })
+        .withNack(throwable -> {
+            // Called when the message is nacked
+        	System.out.println("Called when the message is nacked");
+            return CompletableFuture.completedFuture(null);
+        }));
+        
         return PratoCarrinho.delete(client, cliente);
     }
 
-    private PratoPedidoDTO from(PratoCarrinho pratoCarrinho) {
-        PratoDTO dto = Prato.findById(client, pratoCarrinho.getPrato()).await().indefinitely();
-        return new PratoPedidoDTO(dto.getNome(), dto.getDescricao(), dto.getPreco());
-    }
-    
+	private PratoPedidoDTO from(PratoCarrinho pratoCarrinho) {
+		PratoDTO dto = Prato.findById(client, pratoCarrinho.getPrato()).await().indefinitely();
+		return new PratoPedidoDTO(dto.getNome(), dto.getDescricao(), dto.getPreco());
+	}
+
 }
