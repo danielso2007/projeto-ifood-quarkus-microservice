@@ -17,4 +17,4 @@ LIGHT_GRAY='\033[0;37m'
 WHITE='\033[1;37m'
 NC='\033[0m' # No Color
 echo -e "${YELLOW}Subindo pedido na porta 8083...${NC}"
-mvn quarkus:dev -Dquarkus.http.port=8083
+mvn quarkus:dev -Dquarkus.http.port=8083 -Ddebug=5003

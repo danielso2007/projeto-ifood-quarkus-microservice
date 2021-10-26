@@ -17,4 +17,4 @@ LIGHT_GRAY='\033[0;37m'
 WHITE='\033[1;37m'
 NC='\033[0m' # No Color
 echo -e "${YELLOW}Subindo markeplace na porta 8082...${NC}"
-mvn quarkus:dev -Dquarkus.http.port=8082
+mvn quarkus:dev -Dquarkus.http.port=8082 -Ddebug=5002
