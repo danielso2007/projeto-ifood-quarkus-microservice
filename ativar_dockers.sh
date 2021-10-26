@@ -20,10 +20,12 @@ echo -e "${YELLOW}Iniciando docker de banco de dados postgres, pgadmin4, mongo e
 cd docker_database
 ./start.sh
 cd ..
+sleep 30 &
 echo -e "${YELLOW}Iniciando docker do keycloak, jaegertracing, activemq e kafka: $1${NC}"
 cd docker_outros
 ./start.sh
 cd ..
+sleep 30 &
 echo -e "${YELLOW}Iniciando docker do prometheus e grafana: $1${NC}"
 cd docker_prometheus_grafana
 ./start.sh

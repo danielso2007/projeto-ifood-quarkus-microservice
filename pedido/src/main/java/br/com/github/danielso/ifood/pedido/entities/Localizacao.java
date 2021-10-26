@@ -5,6 +5,8 @@ import java.util.Objects;
 
 import javax.validation.constraints.NotNull;
 
+import io.quarkus.runtime.annotations.IgnoreProperty;
+
 public class Localizacao {
 
 	private Long id;
@@ -13,7 +15,9 @@ public class Localizacao {
 	@NotNull(message = "A longitude não pode ser nula")
 	private Double longitude;
 	private Restaurante restaurante;
+	@IgnoreProperty
 	private Date dataCriacao;
+	@IgnoreProperty
 	private Date dataAtualizacao;
 
 	public Localizacao() {
