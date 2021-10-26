@@ -75,6 +75,8 @@ services:
     restart: on-failure
     ports:
       - "7081:8081"
+    links:
+     - mongo-ifood
     environment:
       ME_CONFIG_MONGODB_ADMINUSERNAME: ifood_pedido
       ME_CONFIG_MONGODB_ADMINPASSWORD: 1q2w3e
