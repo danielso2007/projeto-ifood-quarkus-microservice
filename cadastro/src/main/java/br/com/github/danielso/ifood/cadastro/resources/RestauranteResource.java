@@ -22,6 +22,9 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
 
+import org.eclipse.microprofile.jwt.Claim;
+import org.eclipse.microprofile.jwt.Claims;
+import org.eclipse.microprofile.jwt.JsonWebToken;
 import org.eclipse.microprofile.metrics.annotation.Counted;
 import org.eclipse.microprofile.metrics.annotation.SimplyTimed;
 import org.eclipse.microprofile.metrics.annotation.Timed;
@@ -54,6 +57,7 @@ import br.com.github.danielso.ifood.cadastro.mapper.IRestauranteMapper;
 import br.com.github.danielso.ifood.cadastro.repositories.LocalizacaoRepository;
 import br.com.github.danielso.ifood.cadastro.repositories.RestauranteRepository;
 import io.quarkus.panache.common.Sort;
+import io.quarkus.security.ForbiddenException;
 import io.quarkus.security.identity.SecurityIdentity;
 
 @Traced
@@ -79,6 +83,13 @@ public class RestauranteResource {
 	IRestauranteMapper mapper;
 	@Inject
 	LocalizacaoRepository localizacaoRepository;
+
+	@Inject
+    JsonWebToken jwt;
+
+    @Inject
+    @Claim(standard = Claims.sub)
+    String sub;
 
 	@Inject
 	@Channel("restaurantes")
@@ -118,6 +129,7 @@ public class RestauranteResource {
 	@Counted(displayName = "Quantidade de restaurante cadastrados", name = "cadastro_restaurante_qtd_salvos_restaurante", description = "Quantidades de restaurantes cadastrados", absolute = true)
 	public Response save(@Valid AdicionarRestauranteDTO dto) throws JsonProcessingException {
 		var entity = mapper.toRestaurante(dto);
+		entity.proprietario(sub);
 		repository.persist(entity);
 
 		var responseDTO = mapper.toRestauranteDTO(entity);
@@ -139,6 +151,11 @@ public class RestauranteResource {
 	@Counted(displayName = "Quantidade de restaurante atualizados", name = "cadastro_restaurante_qtd_atualizacao", description = "Quantidades de restaurantes atualizados", absolute = true)
 	public Response update(@PathParam("id") Long id, @Valid AdicionarRestauranteDTO dto) {
 		Restaurante entity = repository.findByIdOptional(id).orElseThrow(NotFoundException::new);
+
+		if (!entity.getProprietario().equals(sub)) {
+            throw new ForbiddenException();
+        }
+
 		mapper.toRestaurante(dto, entity);
 		repository.persist(entity);
 		return Response.ok(mapper.toRestauranteDTO(entity)).build();
