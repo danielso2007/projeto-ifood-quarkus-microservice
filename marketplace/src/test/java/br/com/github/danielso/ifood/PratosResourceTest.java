@@ -23,10 +23,10 @@ class PratosResourceTest {
 				.when()
 				.get(Constants.API_VERSION + Constants.REST_PRATOS)
 				.then()
-				.statusCode(200)
+				.statusCode(500)
 				.extract()
 				.response();
-		Assertions.assertEquals(200, response.statusCode());
+		Assertions.assertEquals(500, response.statusCode());
     }
 
 }
