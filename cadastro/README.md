@@ -103,3 +103,11 @@ pgAdmin: http://localhost:5050
 KeyCloak: http://localhost:8180/auth/
 Prometheus: http://localhost:9090/
 Grafana: http://localhost:3000/login
+Mongo-Express: http://localhost:7081/
+ActiveMQ: http://localhost:8161/console (admin/admin)
+Kibana: http://localhost:5601/app/kibana#/home
+Kafdrop: http://localhost:9000/topic/pedidos/messages?partition=0&offset=0&count=100
+
+Cadastro: http://localhost:8081/q/swagger-ui/
+Marketplace: http://localhost:8082/q/swagger-ui/
+Pedido: http://localhost:8083/q/swagger-ui/

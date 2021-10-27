@@ -5,7 +5,7 @@ import static io.restassured.RestAssured.given;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
-import br.com.github.danielso.ifood.commons.Constants;
+import br.com.github.danielso.ifood.marketplace.commons.Constants;
 import br.com.github.danielso.ifood.testlifecyclemanager.MarketplaceTestLifecycleManager;
 import io.quarkus.test.common.QuarkusTestResource;
 import io.quarkus.test.junit.QuarkusTest;
@@ -23,10 +23,10 @@ class PratosResourceTest {
 				.when()
 				.get(Constants.API_VERSION + Constants.REST_PRATOS)
 				.then()
-				.statusCode(200)
+				.statusCode(500)
 				.extract()
 				.response();
-		Assertions.assertEquals(200, response.statusCode());
+		Assertions.assertEquals(500, response.statusCode());
     }
 
 }

@@ -56,6 +56,34 @@ services:
       - pgsql-cadastro
       - pgsql-marketplace
       - pgsql-keycloak
+  mongo-ifood:
+    image: mongo:5.0.3
+    container_name: mongo-ifood
+    restart: on-failure
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: ifood_pedido
+      MONGO_INITDB_ROOT_PASSWORD: 1q2w3e
+      MONGO_INITDB_DATABASE: ifood_pedido
+    ports:
+      - "27017:27017"
+    volumes:
+      - "mongoDataPedido:/data/db"
+      - "mongoConfigPedido:/data/configdb"
+  mongo-express-ifood:
+    image: mongo-express:latest
+    container_name: mongo-express-ifood
+    restart: on-failure
+    ports:
+      - "7081:8081"
+    links:
+     - mongo-ifood
+    environment:
+      ME_CONFIG_MONGODB_ADMINUSERNAME: ifood_pedido
+      ME_CONFIG_MONGODB_ADMINPASSWORD: 1q2w3e
+      ME_CONFIG_MONGODB_PORT: 27017
+      ME_CONFIG_MONGODB_SERVER: mongo-ifood
+    depends_on:
+      - mongo-ifood
 
 volumes:
   pgsqlconfMarketplace:
@@ -70,6 +98,8 @@ volumes:
   pgadmin4sessiondata:
   pgadmin4conf:
   pgadmin4serverdefinitions:
+  mongoDataPedido:
+  mongoConfigPedido:
 
 networks:
   default:

@@ -48,6 +48,43 @@ services:
       - ./activemq_ifood/persistent/dir/conf:/opt/activemq/conf
       - ./activemq_ifood/persistent/dir/data:/opt/activemq/data
 
+  zookeeper-ifood:
+    image: confluentinc/cp-zookeeper:5.5.6-1-ubi8
+    container_name: "zookeeper-ifood"
+    hostname: "zookeeper-ifood"
+    restart: on-failure
+    environment:
+        ZOO_MY_ID: 1
+        ZOO_PORT: 2181
+        ZOO_SERVERS: server.1=zookeeper:2888:3888;zookeeper:2181
+        ZOOKEEPER_SERVER_ID: 1
+        ZOOKEEPER_CLIENT_PORT: 2181
+        ZOOKEEPER_TICK_TIME: 2000
+        ZOOKEEPER_INIT_LIMIT: 5
+        ZOOKEEPER_SYNC_LIMIT: 5
+  kafka-node-ifood:
+    container_name: kafka-node-ifood
+    image: debezium/kafka:1.1
+    ports:
+     - 9192:9092
+    links:
+     - zookeeper-ifood
+    environment:
+     - ZOOKEEPER_CONNECT=zookeeper-ifood:2181
+  kafdrop-ifood:
+    image: obsidiandynamics/kafdrop:latest
+    container_name: "kafdrop-ifood"
+    hostname: "kafdrop-ifood"
+    restart: "no"
+    ports:
+      - "9000:9000"
+    depends_on:
+      - kafka-node-ifood
+    links:
+      - "kafka-node-ifood:kafka-node-ifood"
+    environment:
+      KAFKA_BROKERCONNECT: kafka-node-ifood:9092
+
 networks:
   default:
     external: true

@@ -23,5 +23,6 @@ echo -e "${YELLOW}Removendo container...${NC}"
 docker-compose rm -f
 echo -e "${YELLOW}Removendo volumes ...${NC}"
 docker network rm docker_outros_net-ifood
+docker network rm kafka_broker-kafka
 docker volume ls
 docker network ls
