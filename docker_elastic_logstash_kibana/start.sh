@@ -16,13 +16,10 @@ LIGHT_CYAN='\033[1;36m'
 LIGHT_GRAY='\033[0;37m'
 WHITE='\033[1;37m'
 NC='\033[0m' # No Color
-echo -e "${YELLOW}Parando container...${NC}"
-docker-compose stop
+
+echo -e "${YELLOW}Executando sudo sysctl -w vm.max_map_count=262144...${NC}"
+sudo sysctl -w vm.max_map_count=262144
+
+echo -e "${YELLOW}Iniciando container...${NC}"
+docker-compose up -d
 docker-compose ps
-echo -e "${YELLOW}Removendo container...${NC}"
-docker-compose rm -f
-echo -e "${YELLOW}Removendo volumes ...${NC}"
-docker network rm docker_outros_net-ifood
-docker network rm kafka_broker-kafka
-docker volume ls
-docker network ls

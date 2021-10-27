@@ -22,7 +22,8 @@ docker-compose ps
 echo -e "${YELLOW}Removendo container...${NC}"
 docker-compose rm -f
 echo -e "${YELLOW}Removendo volumes ...${NC}"
-docker network rm docker_outros_net-ifood
-docker network rm kafka_broker-kafka
+docker volume rm docker_elastic_logstash_kibana-storage
+docker volume rm docker_elastic_logstash_kibana_kibana_yml_volume
+docker network rm docker_elastic_logstash_kibana_elk
 docker volume ls
 docker network ls

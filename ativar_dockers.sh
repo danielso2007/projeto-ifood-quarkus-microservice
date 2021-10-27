@@ -16,18 +16,37 @@ LIGHT_CYAN='\033[1;36m'
 LIGHT_GRAY='\033[0;37m'
 WHITE='\033[1;37m'
 NC='\033[0m' # No Color
+
 echo -e "${YELLOW}Iniciando docker de banco de dados postgres, pgadmin4, mongo e mongo-express: $1${NC}"
 cd docker_database
+pwd
 ./start.sh
 cd ..
-sleep 30 &
+echo -e "${LIGHT_BLUE}Aguarde...${NC}"
+sleep 5
+
 echo -e "${YELLOW}Iniciando docker do keycloak, jaegertracing, activemq e kafka: $1${NC}"
 cd docker_outros
+pwd
 ./start.sh
 cd ..
-sleep 30 &
+echo -e "${LIGHT_BLUE}Aguarde...${NC}"
+sleep 5
+
 echo -e "${YELLOW}Iniciando docker do prometheus e grafana: $1${NC}"
 cd docker_prometheus_grafana
+pwd
 ./start.sh
 cd ..
+echo -e "${LIGHT_BLUE}Aguarde...${NC}"
+sleep 5
+
+echo -e "${YELLOW}Iniciando docker do Elastic, Logstash e Kibana: $1${NC}"
+cd docker_elastic_logstash_kibana
+pwd
+./start.sh
+cd ..
+echo -e "${LIGHT_BLUE}Aguarde...${NC}"
+sleep 5
+
 docker ps --format "table {{.ID}} :: {{.Image}}\t{{.Size}}"

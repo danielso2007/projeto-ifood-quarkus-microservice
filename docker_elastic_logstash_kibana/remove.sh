@@ -18,11 +18,6 @@ WHITE='\033[1;37m'
 NC='\033[0m' # No Color
 echo -e "${YELLOW}Parando container...${NC}"
 docker-compose stop
-docker-compose ps
 echo -e "${YELLOW}Removendo container...${NC}"
 docker-compose rm -f
-echo -e "${YELLOW}Removendo volumes ...${NC}"
-docker network rm docker_outros_net-ifood
-docker network rm kafka_broker-kafka
-docker volume ls
-docker network ls
+docker-compose ps

@@ -25,11 +25,15 @@ import io.vertx.ext.web.Router;
 import io.vertx.ext.web.handler.sockjs.SockJSBridgeOptions;
 import io.vertx.ext.web.handler.sockjs.SockJSHandler;
 import io.vertx.mutiny.core.eventbus.EventBus;
+import java.time.LocalDateTime;
+import org.jboss.logging.Logger;
 
 @Path(Constants.API_VERSION + "/pedidos")
 @Produces(MediaType.APPLICATION_JSON)
 @Consumes(MediaType.APPLICATION_JSON)
 public class PedidoResource {
+
+	private static final Logger LOG = Logger.getLogger(PedidoResource.class);
 
 	@Inject
 	Vertx vertx;
@@ -58,6 +62,7 @@ public class PedidoResource {
 
 	@GET
 	public List<PanacheMongoEntityBase> hello() {
+		LOG.infov("Olá Quarkus {0} ", LocalDateTime.now());
 		return Pedido.listAll();
 	}
 
@@ -65,7 +70,7 @@ public class PedidoResource {
 	@Path("{idPedido}/localizacao")
 	public Pedido novaLocalizacao(@PathParam("idPedido") String idPedido, Localizacao localizacao) {
 		Pedido pedido = Pedido.findById(new ObjectId(idPedido));
-
+		LOG.infov("Olá Quarkus - localizacao {0} ", LocalDateTime.now());
 		pedido.setLocalizacao(localizacao);
 		String json = JsonbBuilder.create().toJson(localizacao);
 		eventBus.sendAndForget("novaLocalizacao", json);
